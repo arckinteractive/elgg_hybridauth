@@ -15,6 +15,7 @@ function elgg_hybridauth_init() {
 
 	elgg_register_action('elgg_hybridauth/settings/save', elgg_get_plugins_path() . 'elgg_hybridauth/actions/settings/save.php', 'admin');
 	elgg_register_action('hybridauth/register', elgg_get_plugins_path() . 'elgg_hybridauth/actions/register.php', 'public');
+	elgg_register_action('hybridauth/deauthorize', elgg_get_plugins_path() . 'elgg_hybridauth/actions/deauthorize.php');
 
 	elgg_extend_view('forms/login', 'hybridauth/login');
 	elgg_extend_view('forms/hybridauth/login', 'hybridauth/aux_login');
@@ -53,12 +54,9 @@ function elgg_hybridauth_page_handler($page) {
 				return false;
 			}
 
-			$ha = new ElggHybridAuth();
-
 			try {
-				$adapter = $ha->authenticate($provider);
-				$profile = $adapter->getUserProfile();
-			} catch (Exception $e) {
+				$ha = new ElggHybridAuth();
+			} catch (Exception $e) { // let's catch endpoint exceptions as they are thrown in the constructor
 				$title = elgg_echo('error:default');
 				$content = $e->getMessage();
 				$layout = elgg_view_layout('error', array(
@@ -69,15 +67,28 @@ function elgg_hybridauth_page_handler($page) {
 				return true;
 			}
 
-			if (elgg_is_logged_in()) {
-				// User already has an account
-				// Linking provider profile to an existing account
-				elgg_set_plugin_user_setting("$provider:uid", $profile->identifier, elgg_get_logged_in_user_guid(), 'elgg_hybridauth');
-				system_message(elgg_echo('hybridauth:link:provider', array($provider)));
-				forward("settings/user/" . elgg_get_logged_in_user_entity()->username);
+			try {
+				$adapter = $ha->authenticate($provider);
+				$profile = $adapter->getUserProfile();
+			} catch (Exception $e) { // catching authentication exceptions
+				// user is likely to have revoked the privileges, while we still have session data stored
+				// let's clear the session and try to reauthenticate
+				$adapter = $ha->getAdapter($provider);
+				if ($adapter->isUserConnected()) {
+					$adapter->logout();
+					header("Location: " . $_SERVER['REQUEST_URI']);
+				}
+				$title = elgg_echo('error:default');
+				$content = $e->getMessage();
+				$layout = elgg_view_layout('error', array(
+					'title' => $title,
+					'content' => $content
+						));
+				echo elgg_view_page($title, $layout, 'error');
+				return true;
 			}
 
-			// Does this user exist?
+			// Does this user profile exist?
 			$options = array(
 				'type' => 'user',
 				'plugin_id' => 'elgg_hybridauth',
@@ -88,6 +99,28 @@ function elgg_hybridauth_page_handler($page) {
 			);
 
 			$users = elgg_get_entities_from_plugin_user_settings($options);
+
+			if (elgg_is_logged_in()) {
+				if (!$users || $users[0]->guid == elgg_get_logged_in_user_guid()) {
+					// User already has an account
+					// Linking provider profile to an existing account
+					elgg_set_plugin_user_setting("$provider:uid", $profile->identifier, elgg_get_logged_in_user_guid(), 'elgg_hybridauth');
+					system_message(elgg_echo('hybridauth:link:provider', array($provider)));
+					$query = parse_url(current_page_url(), PHP_URL_QUERY);
+					forward("settings/user/" . elgg_get_logged_in_user_entity()->username . '?' . $query);
+				} else {
+					// Another user has already linked this profile
+					$adapter->logout();
+					$title = elgg_echo('error:default');
+					$content = elgg_echo('hybridauth:link:provider:error', array($provider));
+					$layout = elgg_view_layout('error', array(
+						'title' => $title,
+						'content' => $content
+							));
+					echo elgg_view_page($title, $layout, 'error');
+					return true;
+				}
+			}
 
 			if ($users) {
 				if (count($users) == 1) {
@@ -154,12 +187,7 @@ function elgg_hybridauth_page_handler($page) {
 			break;
 
 		case 'endpoint' :
-			try {
-				Hybrid_Endpoint::process();
-			} catch (Exception $e) {
-				register_error($e->getMessage());
-				forward();
-			}
+			Hybrid_Endpoint::process();
 			break;
 	}
 

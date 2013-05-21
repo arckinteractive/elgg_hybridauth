@@ -29,6 +29,15 @@ if (elgg_is_sticky_form('hybridauth_register')) {
 	<div>
 		<label><?php echo elgg_echo('hybridauth:username'); ?></label><br />
 		<?php
+		if (!$username) {
+			$username = str_replace(' ', '', $profile->displayName);
+			if (!$username) {
+				$username = $provider . '_user_' . rand(1000, 9999);
+			}
+			while (get_user_by_username($username)) {
+				$username = str_replace(' ', '', $profile->displayName) . '_' . rand(1000, 9999);
+			}
+		}
 		echo elgg_view('input/text', array(
 			'name' => 'username',
 			'value' => $username,
@@ -56,16 +65,6 @@ if (elgg_is_sticky_form('hybridauth_register')) {
 </div>
 
 <?php
-if (!$username) {
-	$username = str_replace(' ', '', $profile->displayName);
-	if (!$username) {
-		$username = $provider . '_user_' . rand(1000, 9999);
-	}
-	while (get_user_by_username($username)) {
-		$username = str_replace(' ', '', $profile->displayName) . '_' . rand(1000, 9999);
-	}
-}
-
 echo elgg_view('input/hidden', array(
 	'name' => 'provider',
 	'value' => $provider

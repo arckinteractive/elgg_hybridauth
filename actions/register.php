@@ -59,7 +59,7 @@ if (elgg_get_config('allow_registration')) {
 
 			$metadata = array(
 				'description' => get_input('description'),
-				"$provider_url" => get_input('profile_url'),
+				"{$provider}_url" => get_input('profile_url'),
 				"$provider" => get_input($provider),
 				'website' => get_input('website_url'),
 				'first_name' => get_input('first_name'),

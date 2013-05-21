@@ -26,6 +26,12 @@ foreach ($providers as $provider => $settings) {
 
 			if (elgg_get_plugin_user_setting("$provider:uid", $user->guid, 'elgg_hybridauth')) {
 				$mod = '<p class="hybridauth-diagnostics-success">' . elgg_echo('hybridauth:provider:user:authenticated') . '</p>';
+				$mod .= elgg_view('output/url', array(
+					'href' => "action/hybridauth/deauthorize?provider=$provider&guid=$user->guid",
+					'is_action' => true,
+					'text' => elgg_echo('hybridauth:provider:user:deauthorize'),
+					'class' => 'elgg-button elgg-button-action'
+						));
 			} else {
 				$mod = elgg_view('output/url', array(
 					'href' => "hybridauth/authenticate?provider=$provider",
