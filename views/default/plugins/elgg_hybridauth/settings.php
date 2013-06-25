@@ -19,6 +19,8 @@ foreach ($diagnostics as $requirement => $status) {
 	}
 }
 
+echo elgg_view('hybridauth/admin/elgg_social_login');
+
 echo elgg_view('output/longtext', array(
 	'value' => elgg_view("hybridauth/setup"),
 	'class' => 'hybridauth-setup-instructions'

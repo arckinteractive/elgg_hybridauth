@@ -16,6 +16,7 @@ function elgg_hybridauth_init() {
 	elgg_register_action('elgg_hybridauth/settings/save', elgg_get_plugins_path() . 'elgg_hybridauth/actions/settings/save.php', 'admin');
 	elgg_register_action('hybridauth/register', elgg_get_plugins_path() . 'elgg_hybridauth/actions/register.php', 'public');
 	elgg_register_action('hybridauth/deauthorize', elgg_get_plugins_path() . 'elgg_hybridauth/actions/deauthorize.php');
+	elgg_register_action('hybridauth/import/elgg_social_login', elgg_get_plugins_path() . 'elgg_hybridauth/actions/import/elgg_social_login.php', 'admin');
 
 	elgg_extend_view('forms/login', 'hybridauth/login');
 	elgg_extend_view('forms/hybridauth/login', 'hybridauth/aux_login');
@@ -123,23 +124,22 @@ function elgg_hybridauth_page_handler($page) {
 			}
 
 			if ($users) {
-				if (count($users) == 1) {
-					// Profile for this provider exists
-					if (!elgg_is_logged_in()) {
-						login($users[0]);
-						system_message(elgg_echo('hybridauth:login:provider', array($provider)));
-						forward();
+				if (count($users) > 1) {
+					// find the user that was created first
+					foreach ($users as $u) {
+						if (empty($user_to_login) || $u->time_created < $user_to_login->time_created) {
+							$user_to_login = $u;
+						}
 					}
-				} else {
-					// Do we have multiple accounts created for this profile???
-					$title = elgg_echo('LoginException:Unknown');
-					$content = $e->getMessage();
-					$layout = elgg_view_layout('error', array(
-						'title' => $title,
-						'content' => $content
-							));
-					echo elgg_view_page($title, $layout, 'error');
-					return true;
+				} else if (count($users) == 1) {
+					$user_to_login = $users[0];
+				}
+
+				// Profile for this provider exists
+				if (!elgg_is_logged_in()) {
+					login($user_to_login);
+					system_message(elgg_echo('hybridauth:login:provider', array($provider)));
+					forward();
 				}
 			}
 
@@ -167,8 +167,7 @@ function elgg_hybridauth_page_handler($page) {
 			} else {
 
 				$title = elgg_echo('hybridauth:register');
-				$content = elgg_view_form('hybridauth/register', array(
-						), array(
+				$content = elgg_view_form('hybridauth/register', array(), array(
 					'provider' => $provider,
 					'profile' => $profile,
 					'invitecode' => $_SESSION['hybridauth']['invitecode'],
