@@ -35,6 +35,13 @@ $english = array(
 							In case of conflicting user records, earlier user records will be preserved',
 	'hybridauth:admin:elgg_social_login:action' => '%s records were updated',
 
+	'hybridauth:admin:social_connect' => 'Import user settings from social_connect',
+	'hybridauth:admin:social_connect:count' => 'It appears that you have had <i>social_connect</i> installed on your site before enabling <i>elgg_hybridauth</i>.<br />
+							We have found <b>%s</b> users that have used their social accounts previously to log in to your site. <br />
+							You can import their settings now so that their ability to use social accounts is not disrupted.<br />
+							In case of conflicting user records, earlier user records will be preserved',
+	'hybridauth:admin:social_connect:action' => '%s records were updated',
+
 	'hybridauth:debug_mode' => 'Debug Mode',
 	'hybridauth:debug_mode:enable' => 'Enable error logging',
 	'hybridauth:debug_mode:disable' => 'Disable error logging',

@@ -17,6 +17,7 @@ function elgg_hybridauth_init() {
 	elgg_register_action('hybridauth/register', elgg_get_plugins_path() . 'elgg_hybridauth/actions/register.php', 'public');
 	elgg_register_action('hybridauth/deauthorize', elgg_get_plugins_path() . 'elgg_hybridauth/actions/deauthorize.php');
 	elgg_register_action('hybridauth/import/elgg_social_login', elgg_get_plugins_path() . 'elgg_hybridauth/actions/import/elgg_social_login.php', 'admin');
+	elgg_register_action('hybridauth/import/social_connect', elgg_get_plugins_path() . 'elgg_hybridauth/actions/import/social_connect.php', 'admin');
 
 	elgg_extend_view('forms/login', 'hybridauth/login');
 	elgg_extend_view('forms/hybridauth/login', 'hybridauth/aux_login');

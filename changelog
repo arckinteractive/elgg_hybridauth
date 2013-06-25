@@ -3,6 +3,8 @@
 -- an option to deauthenticate a social account so it can be linked another Elgg profile
 
 1.0.2
--- an option to import user setting from elgg_social_connect
+-- an option to import user settings from elgg_social_connect
 
+1.0.3
+-- an option to import user settings from social_connect
 
