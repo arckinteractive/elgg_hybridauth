@@ -21,4 +21,8 @@
 		<type>plugin</type>
 		<name>elgg_social_login</name>
 	</conflicts>
+	<conflicts>
+		<type>plugin</type>
+		<name>social_connect</name>
+	</conflicts>
 </plugin_manifest>
