@@ -8,3 +8,6 @@
 1.0.3
 -- an option to import user settings from social_connect
 
+1.0.4
+-- updated documentation
+-- plugin setting to edit permissions scope
