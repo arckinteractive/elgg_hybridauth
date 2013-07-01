@@ -54,6 +54,8 @@ $english = array(
 	'hybridauth:provider:key' => 'Public Key',
 	'hybridauth:provider:secret' => 'Private Key',
 
+	'hybridauth:provider:scope' => 'Permissions scope',
+	
 	'hybridauth:adapter:pass' => 'Service is active',
 
 	'hybridauth:connect' => 'or connect with:',

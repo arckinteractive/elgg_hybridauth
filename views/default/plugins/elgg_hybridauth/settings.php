@@ -1,5 +1,4 @@
 <?php
-
 elgg_load_css('hybridauth.css');
 
 $diagnostics = array(
@@ -76,7 +75,17 @@ foreach ($providers as $provider => $settings) {
 		$ha = new ElggHybridAuth();
 
 		try {
-			$ha->getAdapter($provider);
+			$adapter = $ha->getAdapter($provider);
+			$scope = (isset($settings['scope'])) ? $settings['scope'] : $adapter->adapter->scope;
+			if ($scope) {
+				$mod .= '<div>';
+				$mod .= '<label>' . elgg_echo("hybridauth:provider:scope") . '</label>';
+				$mod .= elgg_view('input/text', array(
+					'name' => "providers[$provider][scope]",
+					'value' => $scope,
+						));
+				$mod .= '</div>';
+			}
 			$footer = '<div class="hybridauth-diagnostics-pass pam">' . elgg_echo('hybridauth:adapter:pass') . '</div>';
 		} catch (Exception $e) {
 			$footer = '<div class="hybridauth-diagnostics-fail pam">' . $e->getMessage() . '</div>';
