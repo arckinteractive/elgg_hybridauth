@@ -138,6 +138,7 @@ function elgg_hybridauth_page_handler($page) {
 
 				// Profile for this provider exists
 				if (!elgg_is_logged_in()) {
+					$user_to_login->elgg_hybridauth_login = 1;
 					login($user_to_login);
 					system_message(elgg_echo('hybridauth:login:provider', array($provider)));
 					forward();
