@@ -42,9 +42,11 @@ if (!elgg_get_plugin_setting('providers', 'elgg_hybridauth')) {
 			"keys" => array("id" => "", "secret" => "")
 		)
 	);
-
-	elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');
-	elgg_set_plugin_setting('base_url', elgg_normalize_url('hybridauth/endpoint'), 'elgg_hybridauth');
-	elgg_set_plugin_setting('debug_mode', true, 'elgg_hybridauth');
-	elgg_set_plugin_setting('debug_file', elgg_get_plugins_path() . 'elgg_hybridauth/debug.info', 'elgg_hybridauth');
+    
+    elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');    
 }
+
+
+elgg_set_plugin_setting('base_url', elgg_normalize_url('hybridauth/endpoint'), 'elgg_hybridauth');
+elgg_set_plugin_setting('debug_mode', false, 'elgg_hybridauth');
+elgg_set_plugin_setting('debug_file', elgg_get_plugins_path() . 'elgg_hybridauth/debug.info', 'elgg_hybridauth');
