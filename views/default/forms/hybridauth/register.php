@@ -151,6 +151,9 @@ foreach ($profile_info as $key => $value) {
 	));
 }
 
+// view for compatibility with profile manager
+echo elgg_view("register/extend_side");
+
 // view to extend to add more fields to the registration form
 echo elgg_view('register/extend', $vars);
 
