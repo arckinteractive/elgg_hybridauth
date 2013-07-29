@@ -95,7 +95,8 @@ function elgg_hybridauth_page_handler($page) {
 				'type' => 'user',
 				'plugin_id' => 'elgg_hybridauth',
 				'plugin_user_setting_name_value_pairs' => array(
-					"$provider:uid" => $profile->identifier
+                    'name' => "$provider:uid",
+                    'value' => $profile->identifier
 				),
 				'limit' => 0
 			);
@@ -123,7 +124,21 @@ function elgg_hybridauth_page_handler($page) {
 					return true;
 				}
 			}
-
+            
+            if (!$users) {
+                // try one more time to match a user with plugin setting
+                $testusers = get_user_by_email($profile->email);
+                foreach ($testusers as $t) {
+                    $users = array();
+                    if ($profile->identifier == elgg_get_plugin_user_setting("$provider:uid", $t->guid, 'elgg_hybridauth')) {
+                        // they do have an account, but for some reason egef_plugin_settings didn't work...
+                        // we've had a few cases of it
+                        $users[] = $t;
+                    }
+                }
+            }
+            
+            
 			if ($users) {
 				if (count($users) > 1) {
 					// find the user that was created first
@@ -138,7 +153,7 @@ function elgg_hybridauth_page_handler($page) {
 
 				// Profile for this provider exists
 				if (!elgg_is_logged_in()) {
-					$user_to_login->elgg_hybridauth_login = 1;
+                    $user_to_login->elgg_hybridauth_login = 1;
 					login($user_to_login);
 					system_message(elgg_echo('hybridauth:login:provider', array($provider)));
 					forward();
