@@ -22,23 +22,37 @@ echo elgg_view('hybridauth/admin/elgg_social_login');
 
 echo elgg_view('output/longtext', array(
 	'value' => elgg_view("hybridauth/setup"),
-	'class' => 'hybridauth-setup-instructions'
+	'class' => 'hybridauth-setup-instructions',
+	'parse_urls' => false
 ));
 
 $debug_mode = elgg_get_plugin_setting('debug_mode', 'elgg_hybridauth');
 $providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
 
-//echo '<div>';
-//echo '<label>' . elgg_echo('hybridauth:debug_mode') . '</label>';
-//echo elgg_view('input/dropdown', array(
-//	'name' => 'debug_mode',
-//	'value' => $debug_mode,
-//	'options_values' => array(
-//		0 => elgg_echo('hybridauth:debug_mode:disable'),
-//		1 => elgg_echo('hybridauth:debug_mode:enable')
-//	)
-//));
-//echo '</div>';
+echo '<div>';
+echo '<label>' . elgg_echo('hybridauth:debug_mode') . '</label>';
+echo elgg_view('input/dropdown', array(
+	'name' => 'debug_mode',
+	'value' => $debug_mode,
+	'options_values' => array(
+		0 => elgg_echo('hybridauth:debug_mode:disable'),
+		1 => elgg_echo('hybridauth:debug_mode:enable')
+	)
+));
+echo '</div>';
+
+
+echo '<div>';
+echo '<label>' . elgg_echo('hybridauth:registration_instructions') . '</label>';
+echo elgg_view('input/longtext', array(
+	'name' => 'registration_instructions',
+	'value' => $vars['entity']->registration_instructions,
+));
+echo elgg_view('output/longtext', array(
+	'text' => elgg_echo('hybridauth:registration_instructions:help'),
+	'class' => 'elgg-subtext'
+));
+echo '</div>';
 
 foreach ($providers as $provider => $settings) {
 

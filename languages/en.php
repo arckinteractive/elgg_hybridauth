@@ -43,8 +43,8 @@ $english = array(
 	'hybridauth:admin:social_connect:action' => '%s records were updated',
 
 	'hybridauth:debug_mode' => 'Debug Mode',
-	'hybridauth:debug_mode:enable' => 'Enable error logging',
-	'hybridauth:debug_mode:disable' => 'Disable error logging',
+	'hybridauth:debug_mode:enable' => 'On',
+	'hybridauth:debug_mode:disable' => 'Off',
 
 	'hybridauth:provider:enable' => 'Enable this provider',
 	'hybridauth:provider:enabled' => 'Enable',
@@ -76,13 +76,15 @@ $english = array(
 	'hybridauth:email:required' => 'This website requires that you provide a valid email address',
 
 	'hybridauth:login' => 'Login with existing credentials',
-	'hybridauth:credentials:login' => 'A username with an email %s already exists. Please login so we can link your %s account to an exisiting profile',
+	'hybridauth:credentials:login' => 'A username with an email %s already exists. Please login so we can link your %s account to an existing profile',
 
 	'hybridauth:provider:user:authenticate' => 'Connect now',
 	'hybridauth:provider:user:deauthorize' => 'Disconnect now',
 	'hybridauth:provider:user:authenticated' => 'You have successfully linked your acount to this provider',
 	'hybridauth:provider:user:deauthorized' => 'You have successfully unlinked your acount from this provider',
 	
+	'hybridauth:registration_instructions' => "Registration instructions",
+	'hybridauth:registration_instructions:help' => "Any instructions or information you need to relay to users after they have authenticated with an external provider but before they complete their registration",
 );
 
 add_translation("en", $english);

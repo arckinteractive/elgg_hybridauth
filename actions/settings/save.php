@@ -5,6 +5,7 @@ $plugin_name = $plugin->getManifest()->getName();
 
 $plugin->setSetting('debug_mode', get_input('debug_mode', false));
 $plugin->setSetting('providers', serialize(get_input('providers', array())));
+$plugin->setSetting('registration_instructions', get_input('registration_instructions'));
 
 system_message(elgg_echo('plugins:settings:save:ok', array($plugin_name)));
 forward(REFERER);
