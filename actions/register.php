@@ -142,7 +142,11 @@ if (elgg_get_config('allow_registration')) {
 				$password,
 					));
 
-			notify_user($new_user->guid, elgg_get_site_entity()->guid, $subject, $body);
+			$notify_setting = elgg_get_plugin_setting('email_credentials', 'elgg_hybridauth');
+			
+			if ($notify_setting != 'no') {
+				notify_user($new_user->guid, elgg_get_site_entity()->guid, $subject, $body);
+			}
 
 			elgg_clear_sticky_form('hybridauth_register');
 

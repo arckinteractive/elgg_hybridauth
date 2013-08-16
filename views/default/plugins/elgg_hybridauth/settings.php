@@ -41,6 +41,19 @@ echo elgg_view('input/dropdown', array(
 ));
 echo '</div>';
 
+/* send elgg credentials on new user creation through hybriauth? */
+echo '<div>';
+echo '<label>' . elgg_echo('hybridauth:registration:credentials') . '</label>';
+echo elgg_view('input/dropdown', array(
+	'name' => 'email_credentials',
+	'value' => $vars['entity']->email_credentials ? $vars['entity']->email_credentials : 'yes',
+	'options_values' => array(
+		'yes' => elgg_echo('option:yes'),
+		'no' => elgg_echo('option:no')
+	)
+));
+echo '</div>';
+
 
 echo '<div>';
 echo '<label>' . elgg_echo('hybridauth:registration_instructions') . '</label>';
@@ -49,7 +62,7 @@ echo elgg_view('input/longtext', array(
 	'value' => $vars['entity']->registration_instructions,
 ));
 echo elgg_view('output/longtext', array(
-	'text' => elgg_echo('hybridauth:registration_instructions:help'),
+	'value' => elgg_echo('hybridauth:registration_instructions:help'),
 	'class' => 'elgg-subtext'
 ));
 echo '</div>';
