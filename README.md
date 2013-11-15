@@ -62,7 +62,7 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 #### Setting up LinkedIn ####
 * Go to https://www.linkedin.com/secure/developer
 * Create new application
-	> It's preferable that r_emailaddress is checked in In OAuth User Agreement
+	> In OAuth User Agreement, update the default scope to your needs. If you are unsure, check r_basicprofile, r_emailaddress, rw_nus and r_network
 	> You do not need to fill out redirect URLs
 * Copy the API Key into the Public Key field in the plugin settings
 * Copy the Secret Key into the Private Key field in the plugin settings
