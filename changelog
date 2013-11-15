@@ -11,3 +11,7 @@
 1.0.4
 -- updated documentation
 -- plugin setting to edit permissions scope
+
+1.0.5
+-- add elgg_forward_url parameter
+-- LinkedIn now relies on the scope defined in app settings, and not in the PHP class
