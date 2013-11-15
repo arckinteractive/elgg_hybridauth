@@ -5,6 +5,9 @@
  */
 elgg_register_event_handler('init', 'system', 'elgg_hybridauth_init');
 
+/**
+ * Initialize the plugin
+ */
 function elgg_hybridauth_init() {
 
 	elgg_register_class('Hybrid_Auth', elgg_get_plugins_path() . 'elgg_hybridauth/classes/Hybrid/Auth.php');
@@ -36,6 +39,25 @@ function elgg_hybridauth_init() {
 	//elgg_register_event_handler('login', 'user', 'elgg_hybridauth_authenticate_all_providers');
 }
 
+
+/**
+ * Page handler callback for /hybridauth
+ * Used an auth start and endpoint
+ *
+ * To authenticate a given provider, use the following URL structure
+ * /hybridauth/authenticate?provider=$provider
+ *
+ * If you are authenticating a provider for a logged in user, and would like to
+ * forward the user to a specific page upon successful authentication,
+ * pass an encoded URL as a 'elgg_forward_url' URL query parameter, e.g.
+ * /hybridauth/authenticate?provider=$provider&elgg_forward_to=$url.
+ * This can be helpful if you are implementing an import or sharing tool:
+ * you can first check if the user is authenticated with a given provider
+ * and then use this handler to avoid duplicating the authentication logic
+ *
+ * @param type $page
+ * @return boolean
+ */
 function elgg_hybridauth_page_handler($page) {
 
 	$action = elgg_extract(0, $page);
@@ -109,8 +131,13 @@ function elgg_hybridauth_page_handler($page) {
 					// Linking provider profile to an existing account
 					elgg_set_plugin_user_setting("$provider:uid", $profile->identifier, elgg_get_logged_in_user_guid(), 'elgg_hybridauth');
 					system_message(elgg_echo('hybridauth:link:provider', array($provider)));
-					$query = parse_url(current_page_url(), PHP_URL_QUERY);
-					forward("settings/user/" . elgg_get_logged_in_user_entity()->username . '?' . $query);
+
+					if ($elgg_forward_url = get_input('elgg_forward_url')) {
+						forward(urldecode($elgg_forward_url));
+					} else {
+						$query = parse_url(current_page_url(), PHP_URL_QUERY);
+						forward("settings/user/" . elgg_get_logged_in_user_entity()->username . '?' . $query);
+					}
 				} else {
 					// Another user has already linked this profile
 					$adapter->logout();
@@ -211,12 +238,18 @@ function elgg_hybridauth_page_handler($page) {
 	return false;
 }
 
+/**
+ * Add hybridauth to allowed walled garden pages
+ */
 function elgg_hybridauth_public_pages($hook, $type, $return, $params) {
 
 	$return[] = 'hybridauth/.*';
 	return $return;
 }
 
+/**
+ * Add an additional provider to the authenticated providers list
+ */
 function elgg_hybridauth_aux_provider($event, $type, $user) {
 
 	$aux_provider = get_input('aux_provider');
@@ -230,6 +263,9 @@ function elgg_hybridauth_aux_provider($event, $type, $user) {
 	return true;
 }
 
+/**
+ * Authenticate all providers the user has previously authenticated with
+ */
 function elgg_hybridauth_authenticate_all_providers($event, $type, $user) {
 
 	$providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
