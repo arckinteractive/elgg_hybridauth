@@ -15,3 +15,6 @@
 1.0.5
 -- add elgg_forward_url parameter
 -- LinkedIn now relies on the scope defined in app settings, and not in the PHP class
+
+1.0.6
+-- fix Yahoo! by replacing 'id' setting with 'key'
