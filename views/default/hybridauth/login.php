@@ -1,5 +1,9 @@
 <?php
 
+if (!HYBRIDAUTH_PUBLIC_AUTH) {
+	return;
+}
+
 $providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
 
 foreach ($providers as $provider => $settings) {

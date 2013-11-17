@@ -32,9 +32,13 @@ foreach ($providers as $provider => $settings) {
 					'text' => elgg_echo('hybridauth:provider:user:deauthorize'),
 					'class' => 'elgg-button elgg-button-action'
 						));
+
+				$mod .= elgg_view("hybridauth/accounts/$provider");
+				
 			} else {
+				$forward_url = urlencode(elgg_normalize_url("hybridauth/accounts/$user->username"));
 				$mod = elgg_view('output/url', array(
-					'href' => "hybridauth/authenticate?provider=$provider",
+					'href' => "hybridauth/authenticate?provider=$provider&elgg_forward_url=$forward_url",
 					'text' => elgg_echo('hybridauth:provider:user:authenticate'),
 					'class' => 'elgg-button elgg-button-action'
 						));

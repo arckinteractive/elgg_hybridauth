@@ -29,6 +29,10 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 * Provides an interface to configure permissions scopes for each provider
 
 
+### Upgrades ###
+
+* When upgrading, disable the plugin first, upload the updated plugin files, and reenable for updated settings to take effect
+
 ### Provider Setup ###
 
 #### Setting up Facebook ####

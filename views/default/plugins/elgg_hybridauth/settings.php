@@ -41,6 +41,18 @@ echo elgg_view('input/dropdown', array(
 ));
 echo '</div>';
 
+echo '<div>';
+echo '<label>' . elgg_echo('hybridauth:public_auth') . '</label>';
+echo elgg_view('input/dropdown', array(
+	'name' => 'public_auth',
+	'value' => ($vars['entity']->public_auth != false),
+	'options_values' => array(
+		0 => elgg_echo('hybridauth:public_auth:disable'),
+		1 => elgg_echo('hybridauth:public_auth:enable')
+	)
+));
+echo '</div>';
+
 /* send elgg credentials on new user creation through hybriauth? */
 echo '<div>';
 echo '<label>' . elgg_echo('hybridauth:registration:credentials') . '</label>';

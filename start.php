@@ -1,5 +1,7 @@
 <?php
 
+define('HYBRIDAUTH_PUBLIC_AUTH', elgg_get_plugin_setting('public_auth', 'elgg_hybridauth'));
+
 /**
  * Elgg HybridAuth
  */
@@ -25,7 +27,6 @@ function elgg_hybridauth_init() {
 	elgg_extend_view('forms/login', 'hybridauth/login');
 	elgg_extend_view('forms/hybridauth/login', 'hybridauth/aux_login');
 	elgg_extend_view('forms/register', 'hybridauth/login');
-	elgg_extend_view('core/settings/account', 'hybridauth/accounts');
 
 	elgg_register_css('hybridauth.css', elgg_get_simplecache_url('css', 'hybridauth/core'));
 	elgg_register_simplecache_view('css/hybridauth/core');
@@ -37,8 +38,15 @@ function elgg_hybridauth_init() {
 
 	elgg_register_event_handler('login', 'user', 'elgg_hybridauth_aux_provider');
 	//elgg_register_event_handler('login', 'user', 'elgg_hybridauth_authenticate_all_providers');
-}
 
+	elgg_register_menu_item('page', array(
+		'name' => 'hybridauth:accounts',
+		'text' => elgg_echo('hybridauth:accounts'),
+		'href' => "hybridauth/accounts",
+		'selected' => (elgg_in_context('hybridauth')),
+		'contexts' => array('settings'),
+	));
+}
 
 /**
  * Page handler callback for /hybridauth
@@ -60,6 +68,10 @@ function elgg_hybridauth_init() {
  */
 function elgg_hybridauth_page_handler($page) {
 
+	if (!HYBRIDAUTH_PUBLIC_AUTH) {
+		gatekeeper();
+	}
+	
 	$action = elgg_extract(0, $page);
 
 	if (!isset($_SESSION['hybridauth'])) {
@@ -86,7 +98,7 @@ function elgg_hybridauth_page_handler($page) {
 				$layout = elgg_view_layout('error', array(
 					'title' => $title,
 					'content' => $content
-						));
+				));
 				echo elgg_view_page($title, $layout, 'error');
 				return true;
 			}
@@ -107,7 +119,7 @@ function elgg_hybridauth_page_handler($page) {
 				$layout = elgg_view_layout('error', array(
 					'title' => $title,
 					'content' => $content
-						));
+				));
 				echo elgg_view_page($title, $layout, 'error');
 				return true;
 			}
@@ -117,8 +129,8 @@ function elgg_hybridauth_page_handler($page) {
 				'type' => 'user',
 				'plugin_id' => 'elgg_hybridauth',
 				'plugin_user_setting_name_value_pairs' => array(
-                    'name' => "$provider:uid",
-                    'value' => $profile->identifier
+					'name' => "$provider:uid",
+					'value' => $profile->identifier
 				),
 				'limit' => 0
 			);
@@ -146,26 +158,26 @@ function elgg_hybridauth_page_handler($page) {
 					$layout = elgg_view_layout('error', array(
 						'title' => $title,
 						'content' => $content
-							));
+					));
 					echo elgg_view_page($title, $layout, 'error');
 					return true;
 				}
 			}
-            
-            if (!$users) {
-                // try one more time to match a user with plugin setting
-                $testusers = get_user_by_email($profile->email);
-                foreach ($testusers as $t) {
-                    $users = array();
-                    if ($profile->identifier == elgg_get_plugin_user_setting("$provider:uid", $t->guid, 'elgg_hybridauth')) {
-                        // they do have an account, but for some reason egef_plugin_settings didn't work...
-                        // we've had a few cases of it
-                        $users[] = $t;
-                    }
-                }
-            }
-            
-            
+
+			if (!$users) {
+				// try one more time to match a user with plugin setting
+				$testusers = get_user_by_email($profile->email);
+				foreach ($testusers as $t) {
+					$users = array();
+					if ($profile->identifier == elgg_get_plugin_user_setting("$provider:uid", $t->guid, 'elgg_hybridauth')) {
+						// they do have an account, but for some reason egef_plugin_settings didn't work...
+						// we've had a few cases of it
+						$users[] = $t;
+					}
+				}
+			}
+
+
 			if ($users) {
 				if (count($users) > 1) {
 					// find the user that was created first
@@ -180,7 +192,7 @@ function elgg_hybridauth_page_handler($page) {
 
 				// Profile for this provider exists
 				if (!elgg_is_logged_in()) {
-                    $user_to_login->elgg_hybridauth_login = 1;
+					$user_to_login->elgg_hybridauth_login = 1;
 					login($user_to_login);
 					system_message(elgg_echo('hybridauth:login:provider', array($provider)));
 					forward();
@@ -207,7 +219,7 @@ function elgg_hybridauth_page_handler($page) {
 					'username' => $email,
 					'provider' => $provider,
 					'provider_uid' => $profile->identifier
-						));
+				));
 			} else {
 
 				$title = elgg_echo('hybridauth:register');
@@ -216,13 +228,13 @@ function elgg_hybridauth_page_handler($page) {
 					'profile' => $profile,
 					'invitecode' => $_SESSION['hybridauth']['invitecode'],
 					'friend_guid' => $_SESSION['hybridauth']['friend_guid']
-						));
+				));
 			}
 
 			$layout = elgg_view_layout('one_column', array(
 				'title' => $title,
 				'content' => $content
-					));
+			));
 
 			echo elgg_view_page($title, $layout);
 
@@ -232,7 +244,42 @@ function elgg_hybridauth_page_handler($page) {
 		case 'endpoint' :
 			Hybrid_Endpoint::process();
 			break;
-	}
+
+		case 'accounts' :
+			
+			gatekeeper();
+			
+			$username = $page[1];
+			$user = get_user_by_username($username);
+			
+			if (!elgg_instanceof($user, 'user')) {
+				$user = elgg_get_logged_in_user_entity();
+				if ($user->username !== $username) {
+					forward("hybridauth/accounts/$user->username");
+				}
+			}
+			
+			if (!$user->canEdit()) {
+				return false;
+			}
+			
+			elgg_set_page_owner_guid($user->guid);
+			
+			elgg_set_context('settings');
+			
+			$title = elgg_echo('hybridauth:accounts');
+			$content = elgg_view('hybridauth/accounts');
+
+			$layout = elgg_view_layout('content', array(
+				'title' => $title,
+				'content' => $content,
+				'filter' => false
+			));
+
+			echo elgg_view_page($title, $layout);
+			return true;
+			break;
+}
 
 
 	return false;

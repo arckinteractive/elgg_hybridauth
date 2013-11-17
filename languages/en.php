@@ -107,6 +107,13 @@ $english = array(
 	'hybridauth:registration_instructions' => "Registration instructions",
 	'hybridauth:registration_instructions:help' => "Any instructions or information you need to relay to users after they have authenticated with an external provider but before they complete their registration",
     'hybridauth:registration:credentials' => "Email elgg credentials to new users who registered using hybridauth?",
+
+	'hybridauth:accounts' => 'Connected social accounts',
+
+	'hybridauth:public_auth' => 'Enable login and registration with social providers (extend the forms) for logged out users',
+	'hybridauth:public_auth:disable' => 'Disable',
+	'hybridauth:public_auth:enable' => 'Enable',
+	
 );
 
 add_translation("en", $english);

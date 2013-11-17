@@ -25,3 +25,9 @@
 -- add documentation for missing providers
 -- getting rid of MySpace, as they don't seem to maintain the sign in service or any API for that matter
 
+
+1.1.0
+-- make it easier to integrate Elgg with provider APIs
+-- add on option to remove social sign in
+-- create a separate page for connected social accounts in user settings
+-- plugins can now extend connected social account modules using ```hybridauth/accounts/$provider``` views
