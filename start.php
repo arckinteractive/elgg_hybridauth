@@ -244,6 +244,7 @@ function elgg_hybridauth_page_handler($page) {
 function elgg_hybridauth_public_pages($hook, $type, $return, $params) {
 
 	$return[] = 'hybridauth/.*';
+	$return[] = 'action/hybridauth/.*';
 	return $return;
 }
 

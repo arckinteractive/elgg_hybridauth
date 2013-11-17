@@ -35,16 +35,14 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 * Go to https://developers.facebook.com/apps
 * Create a new App
 * Select Website with Facebook Login and enter your site URL
-* Copy your App ID into Provider ID field in the plugin settings
-* Copy your App Secret into the Private Key field in the plugin settings
+* Copy your App ID and App Secret to corresponding fields in the plugin settings
 * For more on permissions scope, visit https://developers.facebook.com/docs/reference/login/
 
 #### Setting up Twitter ####
 * Go to https://dev.twitter.com/apps/new
 * Create a new application
 * Enter a Callback URL: http://SITE-URL/hybridauth/endpoint?hauth.done=Twitter
-* Copy your Consumer Key into the Public Key field in the plugin settings
-* Copy your Consumer Secret into the Private Key field in the plugin settings
+* Copy your Consumer Key and Consumer Secret to the corresponding fields in the plugin settings
 
 #### Setting up Google ####
 * Go to https://code.google.com/apis/console/
@@ -55,8 +53,7 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 	> Application Type is Web Application
 	> Your Site or Hostname - click on More options
 	> Authorized Redirect URIs - enter the Authentication URL http://SITE-URL/hybridauth/endpoint?hauth.done=Google
-* Copy your Client ID into the Provider ID field in the plugin settings
-* Copy your Client secret into the Private Key field in the plugin settings
+* Copy your Client ID and Client secret to corresponding fields in the plugin settings
 * For more on permissions scope, see https://developers.google.com/accounts/docs/OAuth2Login#consentpageexperience and https://developers.google.com/oauthplayground/
 
 #### Setting up LinkedIn ####
@@ -74,5 +71,15 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 	> In Access Scopes, select This app requires access to private user data.
 	> Application Domain - enter http://SITE-URL/hybridauth/endpoint?hauth.done=Yahoo
 	> Select APIs for private user data access: requires at least one API to be selected (Social Directory, for example)
-* Copy the Consumer Key to Public Key field in the plugin settings
-* Copy the Consumer Secret to Private Key fields in the plugin settings
+* Copy the Consumer Key and Consumer Secret to corresponding fields in the plugin settings
+
+#### Set up Live ####
+* Go to https://account.live.com/developers/applications/create
+* Create you application
+	> Set redirect domain to your site domain, i.e. http://SITE-URL/
+* Copy Client ID and Client Secret to corresponding fields in the plugin settings
+
+#### Set up FourSquare ####
+* Go to https://foursquare.com/developers/apps
+* Create your application
+* Copy Client ID and Client Secret to corresponding fields in the plugin settings

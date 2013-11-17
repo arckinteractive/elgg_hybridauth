@@ -54,6 +54,27 @@ $english = array(
 	'hybridauth:provider:key' => 'Public Key',
 	'hybridauth:provider:secret' => 'Private Key',
 
+	'hybridauth:provider:Google:id' => 'Client ID',
+	'hybridauth:provider:Google:secret' => 'Client Secret',
+
+	'hybridauth:provider:Facebook:id' => 'App ID',
+	'hybridauth:provider:Facebook:secret' => 'App Secret',
+
+	'hybridauth:provider:Twitter:key' => 'Consumer Key',
+	'hybridauth:provider:Twitter:secret' => 'Consumer Secret',
+
+	'hybridauth:provider:LinkedIn:key' => 'API Key',
+	'hybridauth:provider:LinkedIn:secret' => 'Secret Key',
+
+	'hybridauth:provider:Yahoo:key' => 'Consumer Key',
+	'hybridauth:provider:Yahoo:secret' => 'Consumer Secret',
+
+	'hybridauth:provider:Live:id' => 'Client ID',
+	'hybridauth:provider:Live:secret' => 'Client Secret',
+
+	'hybridauth:provider:Foursquare:id' => 'Client ID',
+	'hybridauth:provider:Foursquare:secret' => 'Client Secret',
+
 	'hybridauth:provider:scope' => 'Permissions scope',
 	
 	'hybridauth:adapter:pass' => 'Service is active',

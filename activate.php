@@ -31,10 +31,10 @@ if (is_null($providers)) {
 			"enabled" => false,
 			"keys" => array("id" => "", "secret" => "")
 		),
-		"MySpace" => array(
-			"enabled" => false,
-			"keys" => array("key" => "", "secret" => "")
-		),
+//		"MySpace" => array(
+//			"enabled" => false,
+//			"keys" => array("key" => "", "secret" => "")
+//		),
 		"LinkedIn" => array(
 			"enabled" => false,
 			"keys" => array("key" => "", "secret" => "")
@@ -44,7 +44,6 @@ if (is_null($providers)) {
 			"keys" => array("id" => "", "secret" => "")
 		)
 	);
-    
 } else {
 
 	$providers = unserialize($providers);
@@ -56,6 +55,10 @@ if (is_null($providers)) {
 		unset($providers['Yahoo']['keys']['id']);
 	}
 
+	// Remove MySpace from Providers
+	if (isset($providers['MySpace'])) {
+		unset($providers['MySpace']);
+	}
 }
 
 elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');

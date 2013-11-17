@@ -87,7 +87,7 @@ foreach ($providers as $provider => $settings) {
 
 		foreach ($settings['keys'] as $key_name => $key_value) {
 			$mod .= '<div>';
-			$mod .= '<label>' . elgg_echo("hybridauth:provider:$key_name") . '</label>';
+			$mod .= '<label>' . elgg_echo("hybridauth:provider:$provider:$key_name") . '</label>';
 			$mod .= elgg_view('input/text', array(
 				'name' => "providers[$provider][keys][$key_name]",
 				'value' => $key_value,

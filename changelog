@@ -18,3 +18,10 @@
 
 1.0.6
 -- fix Yahoo! by replacing 'id' setting with 'key'
+
+1.0.7
+-- add hybridauth actions to public pages to allow access in walled garden mode
+-- use proper key, id and secret labels
+-- add documentation for missing providers
+-- getting rid of MySpace, as they don't seem to maintain the sign in service or any API for that matter
+
