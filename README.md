@@ -66,3 +66,13 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 	> You do not need to fill out redirect URLs
 * Copy the API Key into the Public Key field in the plugin settings
 * Copy the Secret Key into the Private Key field in the plugin settings
+
+#### Setting up Yahoo! ####
+* Go to https://developer.apps.yahoo.com/dashboard/
+* Create new Project
+	> Fill out the project information
+	> In Access Scopes, select This app requires access to private user data.
+	> Application Domain - enter http://SITE-URL/hybridauth/endpoint?hauth.done=Yahoo
+	> Select APIs for private user data access: requires at least one API to be selected (Social Directory, for example)
+* Copy the Consumer Key to Public Key field in the plugin settings
+* Copy the Consumer Secret to Private Key fields in the plugin settings

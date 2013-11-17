@@ -10,7 +10,7 @@ class ElggHybridAuth extends Hybrid_Auth {
 			'debug_file' => elgg_get_plugin_setting('debug_file', 'elgg_hybridauth'),
 			'providers' => unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'))
 		);
-
+		
 		parent::__construct($config);
 	}
 

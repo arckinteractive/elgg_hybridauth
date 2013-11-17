@@ -1,13 +1,15 @@
 <?php
 
-if (!elgg_get_plugin_setting('providers', 'elgg_hybridauth')) {
+$providers = elgg_get_plugin_setting('providers', 'elgg_hybridauth');
+
+if (is_null($providers)) {
 	$providers = array(
 		"OpenID" => array(
 			"enabled" => false
 		),
 		"Yahoo" => array(
 			"enabled" => false,
-			"keys" => array("id" => "", "secret" => ""),
+			"keys" => array("key" => "", "secret" => ""),
 		),
 		"AOL" => array(
 			"enabled" => false
@@ -43,9 +45,20 @@ if (!elgg_get_plugin_setting('providers', 'elgg_hybridauth')) {
 		)
 	);
     
-    elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');    
+} else {
+
+	$providers = unserialize($providers);
+
+	// Update Yahoo! to use 'key' instead of 'id'
+	if (!isset($providers['Yahoo']['keys']['key'])) {
+		$key = $providers['Yahoo']['keys']['id'];
+		$providers['Yahoo']['keys']['key'] = $key;
+		unset($providers['Yahoo']['keys']['id']);
+	}
+
 }
 
+elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');
 
 elgg_set_plugin_setting('base_url', elgg_normalize_url('hybridauth/endpoint'), 'elgg_hybridauth');
 elgg_set_plugin_setting('debug_mode', false, 'elgg_hybridauth');
