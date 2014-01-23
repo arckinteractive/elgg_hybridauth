@@ -138,10 +138,12 @@ function elgg_hybridauth_page_handler($page) {
 			$users = elgg_get_entities_from_plugin_user_settings($options);
 
 			if (elgg_is_logged_in()) {
-				if (!$users || $users[0]->guid == elgg_get_logged_in_user_guid()) {
+				$logged_in = elgg_get_logged_in_user_entity();
+				if (!$users || $users[0]->guid == $logged_in->guid) {
 					// User already has an account
 					// Linking provider profile to an existing account
-					elgg_set_plugin_user_setting("$provider:uid", $profile->identifier, elgg_get_logged_in_user_guid(), 'elgg_hybridauth');
+					elgg_set_plugin_user_setting("$provider:uid", $profile->identifier, $logged_in->guid, 'elgg_hybridauth');
+					elgg_trigger_plugin_hook('hybridauth:authenticate', $provider, array('entity' => $logged_in));
 					system_message(elgg_echo('hybridauth:link:provider', array($provider)));
 
 					if ($elgg_forward_url = get_input('elgg_forward_url')) {
@@ -305,6 +307,7 @@ function elgg_hybridauth_aux_provider($event, $type, $user) {
 
 	if ($aux_provider && $aux_provider_uid) {
 		elgg_set_plugin_user_setting("$aux_provider:uid", $aux_provider_uid, $user->guid, 'elgg_hybridauth');
+		elgg_trigger_plugin_hook('hybridauth:authenticate', $aux_provider, array('entity' => $user));
 		system_message(elgg_echo('hybridauth:link:provider', array($aux_provider)));
 	}
 

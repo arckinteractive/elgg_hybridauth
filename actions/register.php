@@ -118,6 +118,7 @@ if (elgg_get_config('allow_registration')) {
 
 			if ($provider && $provider_uid) {
 				elgg_set_plugin_user_setting("$provider:uid", $provider_uid, $new_user->guid, 'elgg_hybridauth');
+				elgg_trigger_plugin_hook('hybridauth:authenticate', $provider, array('entity' => $logged_in));
 			}
 
 			$params = array_merge($params, $metadata);
