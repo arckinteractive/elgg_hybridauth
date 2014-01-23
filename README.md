@@ -87,3 +87,35 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 * Go to https://foursquare.com/developers/apps
 * Create your application
 * Copy Client ID and Client Secret to corresponding fields in the plugin settings
+
+
+### Developer Notes ###
+
+Since 1.1.1, you can make use of ```'hybridauth:authenticate', $provider``` plugin hook
+to perform some actions, when the user is authenticated with a provider. This might be a good place
+to post stuff to user's wall or to grab a profile picture.
+
+Example of how to post to the user's wall that the user Joined the site:
+
+```
+
+// do stuff when the user is authenticated with one of the providers
+elgg_register_plugin_hook_handler('hybridauth:authenticate', 'all', 'elgg_hybridauth_on_authenticate');
+
+function elgg_hybridauth_on_authenticate($hook, $provider, $return, $params) {
+
+	$user = elgg_extract('entity', $params);
+
+	try {
+		$ha = new ElggHybridAuth();
+		$adapter = $ha->getAdapter($provider);
+		if ($adapter->isUserConnected()) {
+			$status = $user->name . ' just joined ' . elgg_get_config('sitename') . ' at ' . elgg_get_site_url();
+			$adapter->setUserStatus($status);
+		}
+	} catch (Exception $e) {
+		// Something is wrong
+	}
+}
+
+```

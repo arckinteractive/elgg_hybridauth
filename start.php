@@ -71,7 +71,7 @@ function elgg_hybridauth_page_handler($page) {
 	if (!HYBRIDAUTH_PUBLIC_AUTH) {
 		gatekeeper();
 	}
-	
+
 	$action = elgg_extract(0, $page);
 
 	if (!isset($_SESSION['hybridauth'])) {
@@ -248,27 +248,27 @@ function elgg_hybridauth_page_handler($page) {
 			break;
 
 		case 'accounts' :
-			
+
 			gatekeeper();
-			
+
 			$username = $page[1];
 			$user = get_user_by_username($username);
-			
+
 			if (!elgg_instanceof($user, 'user')) {
 				$user = elgg_get_logged_in_user_entity();
 				if ($user->username !== $username) {
 					forward("hybridauth/accounts/$user->username");
 				}
 			}
-			
+
 			if (!$user->canEdit()) {
 				return false;
 			}
-			
+
 			elgg_set_page_owner_guid($user->guid);
-			
+
 			elgg_set_context('settings');
-			
+
 			$title = elgg_echo('hybridauth:accounts');
 			$content = elgg_view('hybridauth/accounts');
 
@@ -281,7 +281,7 @@ function elgg_hybridauth_page_handler($page) {
 			echo elgg_view_page($title, $layout);
 			return true;
 			break;
-}
+	}
 
 
 	return false;

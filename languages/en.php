@@ -113,7 +113,7 @@ $english = array(
 	'hybridauth:public_auth' => 'Enable login and registration with social providers (extend the forms) for logged out users',
 	'hybridauth:public_auth:disable' => 'Disable',
 	'hybridauth:public_auth:enable' => 'Enable',
-	
+
 );
 
 add_translation("en", $english);
