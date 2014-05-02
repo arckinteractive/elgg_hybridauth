@@ -2,6 +2,9 @@
 
 define('HYBRIDAUTH_PUBLIC_AUTH', elgg_get_plugin_setting('public_auth', 'elgg_hybridauth'));
 
+// Composer autoload
+require_once __DIR__ . '/vendors/autoload.php';
+
 /**
  * Elgg HybridAuth
  */
@@ -11,10 +14,6 @@ elgg_register_event_handler('init', 'system', 'elgg_hybridauth_init');
  * Initialize the plugin
  */
 function elgg_hybridauth_init() {
-
-	elgg_register_class('Hybrid_Auth', elgg_get_plugins_path() . 'elgg_hybridauth/classes/Hybrid/Auth.php');
-	elgg_register_class('Hybrid_Endpoint', elgg_get_plugins_path() . 'elgg_hybridauth/classes/Hybrid/Endpoint.php');
-	elgg_register_class('ElggHybridAuth', elgg_get_plugins_path() . 'elgg_hybridauth/classes/ElggHybridAuth.php');
 
 	elgg_register_page_handler('hybridauth', 'elgg_hybridauth_page_handler');
 
