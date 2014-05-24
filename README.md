@@ -97,7 +97,7 @@ to post stuff to user's wall or to grab a profile picture.
 
 Example of how to post to the user's wall that the user Joined the site:
 
-```
+```php
 
 // do stuff when the user is authenticated with one of the providers
 elgg_register_plugin_hook_handler('hybridauth:authenticate', 'all', 'elgg_hybridauth_on_authenticate');
