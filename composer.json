@@ -6,7 +6,7 @@
 	"homepage": "http://arckinteractive.com",
 	"minimum-stability": "dev",
 	"keywords": [
-		"elgg", "plugin", "social", "connect", "auth"
+		"elgg", "plugin", "social", "connect", "auth", "login", "OpenId", "Twitter", "Facebook", "Google", "Hybridauth", "Yahoo"
 	],
 	"license": "GPL-2.0",
 	"authors": [
