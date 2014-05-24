@@ -213,14 +213,15 @@ function elgg_hybridauth_page_handler($page) {
 
 			if ($email && $users = get_user_by_email($email)) {
 
-				$title = elgg_echo('hybridauth:login');
-				$content = elgg_view_form('hybridauth/login', array(
-					'action' => 'action/login'
-						), array(
-					'username' => $email,
-					'provider' => $provider,
-					'provider_uid' => $profile->identifier
-				));
+				// User already has an account, save the token and login
+				$user_to_login = $users[0];
+				elgg_set_plugin_user_setting("$provider:uid", $profile->identifier, $user_to_login->guid, 'elgg_hybridauth');
+				elgg_trigger_plugin_hook('hybridauth:authenticate', $provider, array('entity' => $user_to_login));
+				$user_to_login->elgg_hybridauth_login = 1;
+				login($user_to_login);
+				system_message(elgg_echo('hybridauth:login:provider', array($provider)));
+				forward();
+				
 			} else {
 
 				$title = elgg_echo('hybridauth:register');
