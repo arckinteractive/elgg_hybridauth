@@ -1,4 +1,5 @@
 <?php
+
 elgg_load_css('hybridauth.css');
 
 $diagnostics = array(
@@ -92,7 +93,7 @@ foreach ($providers as $provider => $settings) {
 			0 => elgg_echo('hybridauth:provider:disabled'),
 			1 => elgg_echo('hybridauth:provider:enabled')
 		)
-			));
+	));
 	$mod .= '</div>';
 
 	if (isset($settings['keys'])) {
@@ -103,7 +104,7 @@ foreach ($providers as $provider => $settings) {
 			$mod .= elgg_view('input/text', array(
 				'name' => "providers[$provider][keys][$key_name]",
 				'value' => $key_value,
-					));
+			));
 			$mod .= '</div>';
 		}
 	}
@@ -122,8 +123,44 @@ foreach ($providers as $provider => $settings) {
 				$mod .= elgg_view('input/text', array(
 					'name' => "providers[$provider][scope]",
 					'value' => $scope,
-						));
+				));
 				$mod .= '</div>';
+			}
+
+			if ($provider == 'OpenID') {
+				$mod .= '<div class="clearfix">';
+				$mod .= '<div class="elgg-col elgg-col-1of3">';
+				$mod .= '<label>' . elgg_echo("hybridauth:provider:openid:name") . '</label>';
+				$mod .= '<span class="elgg-text-help">' . elgg_echo("hybridauth:provider:openid:name:help") . '</span>';
+				$mod .= '</div>';
+				$mod .= '<div class="elgg-col elgg-col-2of3">';
+				$mod .= '<label>' . elgg_echo("hybridauth:provider:openid:identifier") . '</label>';
+				$mod .= '<span class="elgg-text-help">' . elgg_echo("hybridauth:provider:openid:identifier:help") . '</span>';
+				$mod .= '</div>';
+				$mod .= '</div>';
+				$openid_settings = elgg_get_plugin_setting('openid_providers', 'elgg_hybridauth');
+				$openid_providers = ($openid_settings) ? unserialize($openid_settings) : array();
+
+				for ($i = 0; $i < 10; $i++) {
+					$mod .= '<div class="clearfix">';
+					$mod .= '<div class="elgg-col elgg-col-1of3">';
+					$mod .= '<div class="pam">';
+					$mod .= elgg_view('input/text', array(
+						'name' => "openid_providers[$i][name]",
+						'value' => (isset($openid_providers[$i])) ? $openid_providers[$i]['name'] : '',
+					));
+					$mod .= '</div>';
+					$mod .= '</div>';
+					$mod .= '<div class="elgg-col elgg-col-2of3">';
+					$mod .= '<div class="pam">';
+					$mod .= elgg_view('input/text', array(
+						'name' => "openid_providers[$i][identifier]",
+						'value' => (isset($openid_providers[$i])) ? $openid_providers[$i]['identifier'] : ''
+					));
+					$mod .= '</div>';
+					$mod .= '</div>';
+					$mod .= '</div>';
+				}
 			}
 			$footer = '<div class="hybridauth-diagnostics-pass pam">' . elgg_echo('hybridauth:adapter:pass') . '</div>';
 		} catch (Exception $e) {

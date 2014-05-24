@@ -83,13 +83,30 @@ function elgg_hybridauth_page_handler($page) {
 	switch ($action) {
 
 		case 'authenticate' :
-			$provider = get_input('provider');
+			$ha_provider = $provider = get_input('provider');
 
-			if (!$provider) {
+			if (!$ha_provider) {
 				return false;
 			}
 
 			try {
+				$ha_providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
+				$openid_settings = elgg_get_plugin_setting('openid_providers', 'elgg_hybridauth');
+				$openid_providers = ($openid_settings) ? unserialize($openid_settings) : array();
+
+				if (!array_key_exists($ha_provider, $ha_providers)) {
+					foreach ($openid_providers as $openid_provider) {
+						if ($openid_provider['name'] == $provider) {
+							$openid = true;
+							set_input('openid', true);
+							set_input('identifier', urlencode($openid_provider['identifier']));
+						}
+					}
+					if (!$openid) {
+						throw new Exception("Provider $provider is not known");
+					}
+				}
+
 				$ha = new ElggHybridAuth();
 			} catch (Exception $e) { // let's catch endpoint exceptions as they are thrown in the constructor
 				$title = elgg_echo('error:default');
@@ -103,12 +120,20 @@ function elgg_hybridauth_page_handler($page) {
 			}
 
 			try {
-				$adapter = $ha->authenticate($provider);
+				if (get_input('openid')) {
+					$ha_provider = 'OpenID';
+					$adapter = $ha->authenticate('OpenID', array(
+						'openid_identifier' => urldecode(get_input('identifier', ''))
+					));
+				} else {
+					$adapter = $ha->authenticate($ha_provider);
+				}
+
 				$profile = $adapter->getUserProfile();
 			} catch (Exception $e) { // catching authentication exceptions
 				// user is likely to have revoked the privileges, while we still have session data stored
 				// let's clear the session and try to reauthenticate
-				$adapter = $ha->getAdapter($provider);
+				$adapter = $ha->getAdapter($ha_provider);
 				if ($adapter->isUserConnected()) {
 					$adapter->logout();
 					header("Location: " . $_SERVER['REQUEST_URI']);
@@ -221,7 +246,6 @@ function elgg_hybridauth_page_handler($page) {
 				login($user_to_login);
 				system_message(elgg_echo('hybridauth:login:provider', array($provider)));
 				forward();
-				
 			} else {
 
 				$title = elgg_echo('hybridauth:register');

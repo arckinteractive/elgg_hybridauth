@@ -1,6 +1,10 @@
 <?php
 
-$provider = get_input('provider');
+$ha_provider = $provider = get_input('provider');
+if (get_input('openid')) {
+	$ha_provider = 'OpenID';
+}
+
 $guid = get_input('guid');
 $user = get_entity($guid);
 
@@ -11,7 +15,7 @@ if (!$provider || !$user) {
 $ha = new ElggHybridAuth();
 
 try {
-	$adapter = $ha->getAdapter($provider);
+	$adapter = $ha->getAdapter($ha_provider);
 	if ($adapter->isUserConnected()) {
 		$adapter->logout();
 	}

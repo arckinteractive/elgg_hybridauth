@@ -114,6 +114,10 @@ $english = array(
 	'hybridauth:public_auth:disable' => 'Disable',
 	'hybridauth:public_auth:enable' => 'Enable',
 
+	'hybridauth:provider:openid:name' => 'OpenID Provider',
+	'hybridauth:provider:openid:name:help' => 'Name of the OpenID provider (e.g. StackExchange)',
+	'hybridauth:provider:openid:identifier' => 'OpenID Identifier',
+	'hybridauth:provider:openid:identifier:help' => 'OpenID URL (e.g. https://openid.stackexchange.com)',
 );
 
 add_translation("en", $english);
