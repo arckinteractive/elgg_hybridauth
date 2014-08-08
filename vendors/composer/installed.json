@@ -6,22 +6,23 @@
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "df19b48f557987e0a9bddff0c12dde37d5bcb757"
+            "reference": "41cf781ed1271e25bf31b715416a349996aa2527"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/df19b48f557987e0a9bddff0c12dde37d5bcb757",
-            "reference": "df19b48f557987e0a9bddff0c12dde37d5bcb757",
+            "url": "https://api.github.com/repos/composer/installers/zipball/41cf781ed1271e25bf31b715416a349996aa2527",
+            "reference": "41cf781ed1271e25bf31b715416a349996aa2527",
             "shasum": ""
         },
         "replace": {
+            "roundcube/plugin-installer": "*",
             "shama/baton": "*"
         },
         "require-dev": {
             "composer/composer": "1.0.*@dev",
-            "phpunit/phpunit": "3.7.*"
+            "phpunit/phpunit": "4.1.*"
         },
-        "time": "2014-04-15 03:26:48",
+        "time": "2014-07-22 17:04:15",
         "type": "composer-installer",
         "extra": {
             "class": "Composer\\Installers\\Installer",
@@ -43,21 +44,23 @@
             {
                 "name": "Kyle Robinson Young",
                 "email": "kyle@dontkry.com",
-                "homepage": "http://dontkry.com",
-                "role": "Developer"
+                "homepage": "https://github.com/shama"
             }
         ],
         "description": "A multi-framework Composer library installer",
         "homepage": "http://composer.github.com/installers/",
         "keywords": [
             "Craft",
+            "Dolibarr",
             "Hurad",
             "MODX Evo",
             "OXID",
             "WolfCMS",
             "agl",
             "annotatecms",
+            "bitrix",
             "cakephp",
+            "chef",
             "codeigniter",
             "concrete5",
             "croogo",
@@ -73,9 +76,12 @@
             "mako",
             "mediawiki",
             "modulework",
+            "moodle",
             "phpbb",
             "piwik",
             "ppi",
+            "puppet",
+            "roundcube",
             "shopware",
             "silverstripe",
             "symfony",
@@ -87,24 +93,24 @@
     },
     {
         "name": "hybridauth/hybridauth",
-        "version": "2.2.0.x-dev",
-        "version_normalized": "2.2.0.9999999-dev",
+        "version": "v2.2.2",
+        "version_normalized": "2.2.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/hybridauth/hybridauth.git",
-            "reference": "57746000e5b2f96469b229b366e56eb70ab7bf20"
+            "reference": "b32c4bf14007c80118a88c5e249f4e3151585732"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/57746000e5b2f96469b229b366e56eb70ab7bf20",
-            "reference": "57746000e5b2f96469b229b366e56eb70ab7bf20",
+            "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/b32c4bf14007c80118a88c5e249f4e3151585732",
+            "reference": "b32c4bf14007c80118a88c5e249f4e3151585732",
             "shasum": ""
         },
         "require": {
             "ext-curl": "*",
             "php": ">=5.2.0"
         },
-        "time": "2014-03-20 16:53:17",
+        "time": "2014-07-11 20:25:12",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
