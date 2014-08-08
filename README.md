@@ -59,6 +59,9 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 	> Authorized Redirect URIs - enter the Authentication URL http://SITE-URL/hybridauth/endpoint?hauth.done=Google
 * Copy your Client ID and Client secret to corresponding fields in the plugin settings
 * For more on permissions scope, see https://developers.google.com/accounts/docs/OAuth2Login#consentpageexperience and https://developers.google.com/oauthplayground/
+* If you are experiencing difficulties with authorizing users using Google:
+	> Ensure that you have activated APIs corresponding to the Permissions Scopes you have listed in the settings: https://developers.google.com/+/api/oauth#scopes
+	> Scopes listed by default will require ```Google+``` and ```Contacts``` API to work
 
 #### Setting up LinkedIn ####
 * Go to https://www.linkedin.com/secure/developer
