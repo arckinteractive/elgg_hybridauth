@@ -136,7 +136,6 @@ authorize their accounts every time they want to post or import data.
 	elgg_register_plugin_hook_handler('hybridauth:authenticate', 'all', '_store_hybridauth_session');
 	elgg_register_plugin_hook_handler('hybridauth:deauthenticate', 'all', '_store_hybridauth_session');
 
-
 	/**
 	 * Store hybridauth session information, so that it can be restored when user logs in
 	 *
@@ -146,7 +145,7 @@ authorize their accounts every time they want to post or import data.
 	 * @param array $params
 	 * @return mixed
 	 */
-	function _store_hybridauth_session($hook, $type, $return, $params) {
+	function simplur_register_store_hybridauth_session($hook, $type, $return, $params) {
 
 		$entity = elgg_extract('entity', $params);
 
@@ -155,6 +154,7 @@ authorize their accounts every time they want to post or import data.
 			$ha = new ElggHybridAuth();
 			$hybridauth_session_data = $ha->getSessionData();
 			elgg_set_plugin_user_setting('hybridauth_session_data', $hybridauth_session_data, $entity->guid, 'elgg_hybridauth');
+			elgg_set_plugin_user_setting('hybridauth_session_id', session_id(), $entity->guid, 'elgg_hybridauth');
 		} catch (Exception $e) {
 			error_log($e->getMessage());
 			// Something is wrong, but whatever
@@ -167,21 +167,25 @@ authorize their accounts every time they want to post or import data.
 	 * Restore hybrdiauth session
 	 * @return boolean
 	 */
-	function _persist_hybridauth_session() {
+	function simplur_register_persist_hybridauth_session() {
 
 		$user = elgg_get_logged_in_user_entity();
 		if (!$user) {
 			return true;
 		}
 
+		if (elgg_in_context('hybridauth')) {
+			return true;
+		}
 		try {
 
-			$ha = new ElggHybridAuth();
-			$hybridauth_session_data = $ha->getSessionData();
-			$stored_session_data = elgg_get_plugin_user_setting('hybridauth_session_data', $user->guid, 'elgg_hybridauth');
-			if ($stored_session_data && $hybridauth_session_data != $stored_session_data) {
+			$session_id = elgg_get_plugin_user_setting('hybridauth_session_id', $user->guid, 'elgg_hybridauth');
+			if ($session_id && session_id() !== $session_id) {
 				error_log('Restoring hybridauth session');
+				$stored_session_data = elgg_get_plugin_user_setting('hybridauth_session_data', $user->guid, 'elgg_hybridauth');
+				$ha = new ElggHybridAuth();
 				$ha->restoreSessionData($stored_session_data);
+				elgg_set_plugin_user_setting('hybridauth_session_id', session_id(), $user->guid, 'elgg_hybridauth');
 			}
 		} catch (Exception $e) {
 			error_log($e->getMessage());
