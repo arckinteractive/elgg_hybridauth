@@ -20,6 +20,7 @@ try {
 		$adapter->logout();
 	}
 	elgg_unset_plugin_user_setting("$provider:uid", $user->guid, 'elgg_hybridauth');
+	elgg_trigger_plugin_hook('hybridauth:deauthenticate', $provider, array('entity' => $user));
 	system_message(elgg_echo('hybridauth:provider:user:deauthorized'));
 } catch (Exception $e) {
 	register_error($e->getMessage());

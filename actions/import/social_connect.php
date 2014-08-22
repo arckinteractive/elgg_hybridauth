@@ -10,10 +10,10 @@ foreach ($providers as $provider => $settings) {
 		'type' => 'user',
 		'plugin_id' => 'social_connect',
 		'plugin_user_setting_names' => array("{$provider}/uid"),
-		'count' => true
+		'limit' => 0,
 	);
 
-	$users = elgg_get_entities_from_plugin_user_settings($options);
+	$users = new ElggBatch('elgg_get_entities_from_plugin_user_settings', $options);
 
 	if ($users) {
 		foreach ($users as $user) {

@@ -9,7 +9,7 @@ $options = array(
 	'limit' => 0
 );
 
-$users = elgg_get_entities_from_plugin_user_settings($options);
+$users = new ElggBatch('elgg_get_entities_from_plugin_user_settings', $options);
 
 foreach ($users as $user) {
 
