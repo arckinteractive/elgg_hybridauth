@@ -97,7 +97,7 @@ $english = array(
 	'hybridauth:email:required' => 'This website requires that you provide a valid email address',
 
 	'hybridauth:login' => 'Login with existing credentials',
-	'hybridauth:credentials:login' => 'A username with an email %s already exists. Please login so we can link your %s account to an existing profile',
+	'hybridauth:credentials:login' => 'An account with the email %s already exists. Please login so we can link your %s account to your existing profile.',
 
 	'hybridauth:provider:user:authenticate' => 'Connect now',
 	'hybridauth:provider:user:deauthorize' => 'Disconnect now',

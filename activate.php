@@ -22,6 +22,10 @@ if (is_null($providers)) {
 			"enabled" => false,
 			"keys" => array("id" => "", "secret" => ""),
 		),
+                "Instagram" => array (
+                        "enabled" => false,
+                        "keys"    => array ( "id" => "", "secret" => "" )
+                ),
 		"Twitter" => array(
 			"enabled" => false,
 			"keys" => array("key" => "", "secret" => "")

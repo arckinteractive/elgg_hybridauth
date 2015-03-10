@@ -9,25 +9,48 @@
 elgg_make_sticky_form('hybridauth_register');
 
 // Get variables
-$username = get_input('username');
-$password = get_input('password', null, false);
-$password2 = get_input('password2', null, false);
-$email = get_input('email');
+$username       = get_input('username');
+$password       = get_input('password', null, false);
+$password2      = get_input('password2', null, false);
+$email          = get_input('email');
 $email_verified = get_input('email_verified');
+$authpass       = get_input('authpass', null, false);
+
 if ($email_verified) {
 	$email = $email_verified;
 	$verified = true;
 }
-$name = get_input('name');
-$friend_guid = (int) get_input('friend_guid', 0);
-$invitecode = get_input('invitecode');
-$provider_uid = get_input('provider_uid');
-$provider = get_input('provider');
-$photo_url = get_input('photo_url');
 
+$name         = get_input('name');
+$friend_guid  = (int) get_input('friend_guid', 0);
+$invitecode   = get_input('invitecode');
+$provider_uid = get_input('provider_uid');
+$provider     = get_input('provider');
+$photo_url    = get_input('photo_url');
+
+// The user has an existing account. Lets prompt for their password
 if ($users = get_user_by_email($email)) {
-	forward("hybridauth/authenticate?provider=$provider&email=$email");
+
+    $return_url = elgg_get_site_url() . "hybridauth/authenticate?provider={$provider}&require_auth=true&e=" . urlencode($email);
+
+    if ($authpass) {
+
+        // Authenticate the user
+        $result = elgg_authenticate($users[0]->username, $authpass);
+
+        if ($result !== true) {
+            register_error($result);
+    	    forward($return_url . '&auth_fail=1');
+        } 
+
+        // We have a successful authentication
+        forward("hybridauth/authenticate?provider=$provider&email=$email");
+    } 
+
+    // Go back to the registration screen and request a password
+    forward($return_url);
 }
+
 if (elgg_get_config('allow_registration')) {
 	try {
 		if (trim($password) == "" || trim($password2) == "") {
