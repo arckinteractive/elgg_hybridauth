@@ -39,6 +39,11 @@ return
 				"trustForwarded" => false
 			),
 
+                        "Instagram" => array (
+                                "enabled" => true,
+                                "keys"    => array ( "id" => "", "secret" => "" )
+                        ),
+
 			"Twitter" => array ( 
 				"enabled" => true,
 				"keys"    => array ( "key" => "", "secret" => "" ) 
