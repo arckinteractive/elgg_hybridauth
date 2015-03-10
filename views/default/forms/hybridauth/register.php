@@ -114,7 +114,7 @@ if ($profile->emailVerified) {
     if ($require_auth) {
         echo '<p>' . elgg_echo('hybridauth:credentials:login', array($email, $provider)) . '</p>';
     } else {
-        echo '<p>' . elgg_echo('hybridauth:name:required') . '</p>';
+        echo '<p>' . elgg_echo('hybridauth:email:required') . '</p>';
     }
 
     echo '<div class="mtm">';
