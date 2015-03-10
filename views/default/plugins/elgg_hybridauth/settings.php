@@ -170,3 +170,6 @@ foreach ($providers as $provider => $settings) {
 
 	echo elgg_view_module('widget', $title, $mod, array('footer' => $footer, 'class' => 'hybridauth-provider-settings'));
 }
+
+// refresh the endpoint
+elgg_set_plugin_setting('base_url', elgg_normalize_url('hybridauth/endpoint'), 'elgg_hybridauth');
