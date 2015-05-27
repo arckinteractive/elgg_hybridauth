@@ -46,6 +46,12 @@ $english = array(
 	'hybridauth:debug_mode:enable' => 'On',
 	'hybridauth:debug_mode:disable' => 'Off',
 
+	'hybridauth:persistent_session' => 'Persistent User Sessions',
+	'hybridauth:persistent_session:help' => 'Do not enable this option if you are only using hybridauth for login and registration. '
+							. 'This feature is designed to persist user sessions for better integration with provider APIs',
+	'hybridauth:persistent_session:enable' => 'On',
+	'hybridauth:persistent_session:disable' => 'Off',
+
 	'hybridauth:provider:enable' => 'Enable this provider',
 	'hybridauth:provider:enabled' => 'Enable',
 	'hybridauth:provider:disabled' => 'Disable',

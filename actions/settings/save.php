@@ -9,6 +9,7 @@ $plugin->setSetting('openid_providers', serialize(get_input('openid_providers', 
 $plugin->setSetting('email_credentials', get_input('email_credentials', 'yes'));
 $plugin->setSetting('registration_instructions', get_input('registration_instructions'));
 $plugin->setSetting('public_auth', get_input('public_auth', true));
+$plugin->setSetting('persistent_session', get_input('persistent_session', false));
 
 system_message(elgg_echo('plugins:settings:save:ok', array($plugin_name)));
 forward(REFERER);

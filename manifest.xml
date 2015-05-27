@@ -25,4 +25,8 @@
 		<type>plugin</type>
 		<name>social_connect</name>
 	</conflicts>
+	<conflicts>
+		<type>plugin</type>
+		<name>oauth_api</name>
+	</conflicts>
 </plugin_manifest>

@@ -2,9 +2,11 @@
 
 elgg_load_css('hybridauth.css');
 
+$entity = elgg_extract('entity', $vars);
+
 $diagnostics = array(
 	'php_version' => (version_compare(PHP_VERSION, '5.2.0', '>=')),
-	'elgg_oauth' => (!class_exists('OAuthException')),
+	//'elgg_oauth' => (!class_exists('OAuthException')), // @since 1.3 declared as conflict in plugin manifest
 	'curl' => (function_exists('curl_init')),
 	'json' => (function_exists('json_decode')),
 	'pecl_oauth' => (!extension_loaded('oauth'))
@@ -27,14 +29,11 @@ echo elgg_view('output/longtext', array(
 	'parse_urls' => false
 ));
 
-$debug_mode = elgg_get_plugin_setting('debug_mode', 'elgg_hybridauth');
-$providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
-
 echo '<div>';
 echo '<label>' . elgg_echo('hybridauth:debug_mode') . '</label>';
 echo elgg_view('input/dropdown', array(
 	'name' => 'debug_mode',
-	'value' => $debug_mode,
+	'value' => $entity->debug_mode,
 	'options_values' => array(
 		0 => elgg_echo('hybridauth:debug_mode:disable'),
 		1 => elgg_echo('hybridauth:debug_mode:enable')
@@ -46,10 +45,23 @@ echo '<div>';
 echo '<label>' . elgg_echo('hybridauth:public_auth') . '</label>';
 echo elgg_view('input/dropdown', array(
 	'name' => 'public_auth',
-	'value' => ($vars['entity']->public_auth != false),
+	'value' => ($entity->public_auth != false),
 	'options_values' => array(
 		0 => elgg_echo('hybridauth:public_auth:disable'),
 		1 => elgg_echo('hybridauth:public_auth:enable')
+	)
+));
+echo '</div>';
+
+echo '<div>';
+echo '<label>' . elgg_echo('hybridauth:persistent_session') . '</label>';
+echo '<div class="elgg-text-help">' . elgg_echo('hybridauth:persistent_session:help') . '</div>';
+echo elgg_view('input/dropdown', array(
+	'name' => 'persistent_session',
+	'value' => $entity->persistent_session,
+	'options_values' => array(
+		0 => elgg_echo('hybridauth:persistent_session:disable'),
+		1 => elgg_echo('hybridauth:persistent_session:enable')
 	)
 ));
 echo '</div>';
@@ -59,7 +71,7 @@ echo '<div>';
 echo '<label>' . elgg_echo('hybridauth:registration:credentials') . '</label>';
 echo elgg_view('input/dropdown', array(
 	'name' => 'email_credentials',
-	'value' => $vars['entity']->email_credentials ? $vars['entity']->email_credentials : 'yes',
+	'value' => $entity->email_credentials ? $entity->email_credentials : 'yes',
 	'options_values' => array(
 		'yes' => elgg_echo('option:yes'),
 		'no' => elgg_echo('option:no')
@@ -72,7 +84,7 @@ echo '<div>';
 echo '<label>' . elgg_echo('hybridauth:registration_instructions') . '</label>';
 echo elgg_view('input/longtext', array(
 	'name' => 'registration_instructions',
-	'value' => $vars['entity']->registration_instructions,
+	'value' => $entity->registration_instructions,
 ));
 echo elgg_view('output/longtext', array(
 	'value' => elgg_echo('hybridauth:registration_instructions:help'),
@@ -80,6 +92,7 @@ echo elgg_view('output/longtext', array(
 ));
 echo '</div>';
 
+$providers = ($entity->providers) ? unserialize($entity->providers) : array();
 foreach ($providers as $provider => $settings) {
 
 	$title = elgg_view_image_block(elgg_view_icon(strtolower("auth-$provider")), $provider);
@@ -112,10 +125,11 @@ foreach ($providers as $provider => $settings) {
 	$footer = '';
 	if ($settings['enabled']) {
 
-		$ha = new ElggHybridAuth();
-
 		try {
+
+			$ha = (new \Elgg\HybridAuth\Client())->client();
 			$adapter = $ha->getAdapter($provider);
+
 			$scope = (isset($settings['scope'])) ? $settings['scope'] : $adapter->adapter->scope;
 			if ($scope) {
 				$mod .= '<div>';
@@ -170,6 +184,3 @@ foreach ($providers as $provider => $settings) {
 
 	echo elgg_view_module('widget', $title, $mod, array('footer' => $footer, 'class' => 'hybridauth-provider-settings'));
 }
-
-// refresh the endpoint
-elgg_set_plugin_setting('base_url', elgg_normalize_url('hybridauth/endpoint'), 'elgg_hybridauth');
