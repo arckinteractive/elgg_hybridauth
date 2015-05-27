@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'BaseFacebook' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/thirdparty/Facebook/base_facebook.php',
-    'ElggHybridAuth' => $baseDir . '/classes/ElggHybridAuth.php',
     'Facebook' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/thirdparty/Facebook/facebook.php',
     'FacebookApiException' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/thirdparty/Facebook/base_facebook.php',
     'Hybrid_Auth' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php',

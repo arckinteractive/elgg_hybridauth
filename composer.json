@@ -16,7 +16,9 @@
 		}
 	],
 	"autoload": {
-		"classmap": ["classes/"]
+		"psr-0": {
+			"": "classes/"
+		}
 	},
 	"require": {
 		"php": ">=5.4",

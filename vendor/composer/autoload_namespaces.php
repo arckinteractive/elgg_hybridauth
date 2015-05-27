@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Hybrid' => array($vendorDir . '/hybridauth/hybridauth/hybridauth'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src'),
+    '' => array($baseDir . '/classes'),
 );
