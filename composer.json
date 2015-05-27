@@ -1,10 +1,8 @@
 {
 	"name": "arckinteractive/elgg_hybridauth",
 	"type": "elgg-plugin",
-	"repository": "ArckInteractive/elgg_hybridauth",
 	"description": "HybridAuth Integration for Elgg",
 	"homepage": "http://arckinteractive.com",
-	"minimum-stability": "dev",
 	"keywords": [
 		"elgg", "plugin", "social", "connect", "auth", "login", "OpenId", "Twitter", "Facebook", "Google", "Hybridauth", "Yahoo"
 	],
@@ -17,20 +15,13 @@
 			"name": "Matt Beckett"
 		}
 	],
-	"extra": {
-		"installer-name": "elgg_hybridauth"
-	},
-		"config": {
-		"vendor-dir": "vendors",
-		"preferred-install": "dist"
-	},
 	"autoload": {
 		"classmap": ["classes/"]
 	},
 	"require": {
-		"php": ">=5.3.3",
-		"composer/installers": ">=1.0.8",
-		"hybridauth/hybridauth": "2.2.*"
+		"php": ">=5.4",
+		"composer/installers": "~1.*",
+		"hybridauth/hybridauth": "2.4.1"
 	}
 }
 
