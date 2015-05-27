@@ -3,7 +3,7 @@
 define('HYBRIDAUTH_PUBLIC_AUTH', elgg_get_plugin_setting('public_auth', 'elgg_hybridauth'));
 
 // Composer autoload
-require_once __DIR__ . '/vendors/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * Elgg HybridAuth
