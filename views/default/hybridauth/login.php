@@ -1,6 +1,6 @@
 <?php
 
-if (!HYBRIDAUTH_PUBLIC_AUTH) {
+if (!elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')) {
 	return;
 }
 

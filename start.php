@@ -1,7 +1,5 @@
 <?php
 
-define('HYBRIDAUTH_PUBLIC_AUTH', elgg_get_plugin_setting('public_auth', 'elgg_hybridauth'));
-
 // Composer autoload
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -68,7 +66,7 @@ function elgg_hybridauth_init() {
  */
 function elgg_hybridauth_page_handler($page) {
 
-	if (!HYBRIDAUTH_PUBLIC_AUTH) {
+	if (!elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')) {
 		gatekeeper();
 	}
 

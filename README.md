@@ -195,3 +195,10 @@ authorize their accounts every time they want to post or import data.
 		return true;
 	}
 ```
+
+## Upgrading
+
+### To 1.3
+
+* For performance reasons, ```HYBRIDAUTH_PUBLIC_AUTH``` is not longer defined.
+Call ```elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')``` where needed.
