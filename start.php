@@ -1,15 +1,17 @@
 <?php
 
-// Composer autoload
-require_once __DIR__ . '/vendor/autoload.php';
-
 /**
  * Elgg HybridAuth
  */
+
+// Composer autoload
+require_once __DIR__ . '/vendor/autoload.php';
+
 elgg_register_event_handler('init', 'system', 'elgg_hybridauth_init');
 
 /**
  * Initialize the plugin
+ * @return void
  */
 function elgg_hybridauth_init() {
 
@@ -51,20 +53,21 @@ function elgg_hybridauth_init() {
  * Used an auth start and endpoint
  *
  * To authenticate a given provider, use the following URL structure
- * /hybridauth/authenticate?provider=$provider
+ * /hybridauth/authenticate?provider=<provider>
  *
  * If you are authenticating a provider for a logged in user, and would like to
  * forward the user to a specific page upon successful authentication,
- * pass an encoded URL as a 'elgg_forward_url' URL query parameter, e.g.
- * /hybridauth/authenticate?provider=$provider&elgg_forward_to=$url.
+ * pass an encoded URL as a 'elgg_forward_url' URL query parameter, 
+ * e.g. /hybridauth/authenticate?provider=<provider>&elgg_forward_to=<url>.
  * This can be helpful if you are implementing an import or sharing tool:
  * you can first check if the user is authenticated with a given provider
  * and then use this handler to avoid duplicating the authentication logic
  *
- * @param type $page
+ * @param array  $page            URL segments
+ * @param string $page_identifier "hybridauth"
  * @return boolean
  */
-function elgg_hybridauth_page_handler($page) {
+function elgg_hybridauth_page_handler($page, $page_identifier) {
 
 	if (!elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')) {
 		gatekeeper();
@@ -262,9 +265,7 @@ function elgg_hybridauth_page_handler($page) {
 			));
 
 			echo elgg_view_page($title, $layout);
-
 			return true;
-			break;
 
 		case 'endpoint' :
 			Hybrid_Endpoint::process();
@@ -303,7 +304,6 @@ function elgg_hybridauth_page_handler($page) {
 
 			echo elgg_view_page($title, $layout);
 			return true;
-			break;
 	}
 
 
@@ -312,16 +312,28 @@ function elgg_hybridauth_page_handler($page) {
 
 /**
  * Add hybridauth to allowed walled garden pages
+ *
+ * @param string $hook   "public_pages"
+ * @param string $type   "walled_garden"
+ * @param array  $return Public pages
+ * @param array  $params Hook params
+ * @return array
  */
 function elgg_hybridauth_public_pages($hook, $type, $return, $params) {
 
+	$return = (array) $return;
 	$return[] = 'hybridauth/.*';
 	$return[] = 'action/hybridauth/.*';
 	return $return;
 }
 
 /**
- * Add an additional provider to the authenticated providers list
+ * Add an additional provider to the list of providers the user is authenticated with
+ *
+ * @param string   $event "login"
+ * @param string   $type  "user"
+ * @param ElggUser $user  User entity
+ * @return boolean
  */
 function elgg_hybridauth_aux_provider($event, $type, $user) {
 
@@ -339,6 +351,12 @@ function elgg_hybridauth_aux_provider($event, $type, $user) {
 
 /**
  * Authenticate all providers the user has previously authenticated with
+ * This callback is not currently in use. It's added here for illustration purposes
+ *
+ * @param string   $event "login"
+ * @param string   $type  "user"
+ * @param ElggUser $user  User entity
+ * @return boolean
  */
 function elgg_hybridauth_authenticate_all_providers($event, $type, $user) {
 
