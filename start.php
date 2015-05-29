@@ -44,9 +44,6 @@ function elgg_hybridauth_init() {
 		'selected' => (elgg_in_context('hybridauth')),
 		'contexts' => array('settings'),
 	));
-
-	elgg_register_plugin_hook_handler('hybridauth:authenticate', 'all', 'simplur_register_store_hybridauth_session');
-	elgg_register_plugin_hook_handler('hybridauth:deauthenticate', 'all', 'simplur_register_store_hybridauth_session');
 }
 
 /**
@@ -92,7 +89,7 @@ function elgg_hybridauth_page_handler($segments, $identifier) {
 			echo elgg_view('resources/hybridauth/accounts');
 			return true;
 	}
-	
+
 	return false;
 }
 
@@ -127,9 +124,12 @@ function elgg_hybridauth_aux_provider($event, $type, $user) {
 	$aux_provider_uid = get_input('aux_provider_uid');
 
 	if ($aux_provider && $aux_provider_uid) {
-		elgg_set_plugin_user_setting("$aux_provider:uid", $aux_provider_uid, $user->guid, 'elgg_hybridauth');
-		elgg_trigger_plugin_hook('hybridauth:authenticate', $aux_provider, array('entity' => $user));
-		system_message(elgg_echo('hybridauth:link:provider', array($aux_provider)));
+		$ha_session = new \Elgg\HybridAuth\Session($user);
+		$provider = $ha_session->getProvider($aux_provider);
+		if ($provider) {
+			$ha_session->addAuthRecord($provider, $aux_provider_uid);
+			system_message(elgg_echo('hybridauth:link:provider', array($provider->getName())));
+		}
 	}
 
 	return true;
@@ -146,66 +146,24 @@ function elgg_hybridauth_aux_provider($event, $type, $user) {
  */
 function elgg_hybridauth_authenticate_all_providers($event, $type, $user) {
 
-	$providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
+	$ha_session = new \Elgg\HybridAuth\Session($user);
+	$providers = $ha_session->getProviders();
 
-	foreach ($providers as $provider => $settings) {
+	foreach ($providers as $provider) {
 
-		if ($settings['enabled']) {
+		if (!$provider->isEnabled()) {
+			continue;
+		}
 
-			$adapter = false;
+		if (!$ha_session->isAuthenticated($provider) || $ha_session->isConnected($provider)) {
+			continue;
+		}
 
-			$ha = new ElggHybridAuth();
-
-			try {
-				$adapter = $ha->getAdapter($provider);
-			} catch (Exception $e) {
-				// do nothing
-			}
-
-			if ($adapter) {
-				if (elgg_get_plugin_user_setting("$provider:uid", $user->guid, 'elgg_hybridauth')) {
-					try {
-						$ha->authenticate($provider);
-					} catch (Exception $e) {
-						register_error($e->getMessage());
-						register_error(elgg_echo('hybridauth:unlink:provider', array($provider)));
-						elgg_unset_plugin_user_setting("$provider:uid", $user->guid, 'elgg_hybridauth');
-					}
-				}
-			}
+		if (!$ha_session->authenticate($provider, false)) {
+			register_error(elgg_echo('hybridauth:unlink:provider', array($provider)));
+			$ha_session->removeAuthRecord($provider);
 		}
 	}
 
 	return true;
-}
-
-/**
- * Store hybridauth session information, so that it can be restored at a later point
- *
- * @param string $hook     "hybridauth:authenticate",
- * @param string $provider "all"
- * @param mixed  $return   No return expected
- * @param array  $params   Hook params
- * @return mixed
- */
-function simplur_register_store_hybridauth_session($hook, $provider, $return, $params) {
-
-	if (!elgg_get_plugin_setting('persistent_session', 'elgg_hybridauth')) {
-		return $return;
-	}
-
-	$entity = elgg_extract('entity', $params);
-
-	try {
-
-		$ha = new ElggHybridAuth();
-		$hybridauth_session_data = $ha->getSessionData();
-		elgg_set_plugin_user_setting('hybridauth_session_data', $hybridauth_session_data, $entity->guid, 'elgg_hybridauth');
-		elgg_set_plugin_user_setting('hybridauth_session_id', session_id(), $entity->guid, 'elgg_hybridauth');
-	} catch (Exception $e) {
-		// error_log($e->getMessage());
-		// Something is wrong, but whatever
-	}
-
-	return $return;
 }

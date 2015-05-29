@@ -127,10 +127,12 @@ foreach ($providers as $provider => $settings) {
 
 		try {
 
-			$ha = (new \Elgg\HybridAuth\Client())->client();
-			$adapter = $ha->getAdapter($provider);
-
-			$scope = (isset($settings['scope'])) ? $settings['scope'] : $adapter->adapter->scope;
+			$scope = (isset($settings['scope'])) ? $settings['scope'] : null;
+			if (!$scope) {
+				$adapter = (new \Elgg\HybridAuth\Session)->getClient()->getAdapater($provider);
+				$scope = ($adapter) ? $adapter->adapter->scope : null;
+			}
+			
 			if ($scope) {
 				$mod .= '<div>';
 				$mod .= '<label>' . elgg_echo("hybridauth:provider:scope") . '</label>';
