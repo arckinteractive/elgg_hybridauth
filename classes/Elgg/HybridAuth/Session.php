@@ -222,6 +222,7 @@ class Session {
 	 */
 	public function getAdapter(Provider $provider) {
 		try {
+			$this->restore();
 			return $this->getClient()->getAdapter($provider->getId(), $provider->getAdapterParams());
 		} catch (\Exception $ex) {
 			elgg_log($ex->getMessage(), 'ERROR');
