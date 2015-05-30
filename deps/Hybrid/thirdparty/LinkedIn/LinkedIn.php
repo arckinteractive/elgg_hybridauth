@@ -1877,7 +1877,7 @@ class LinkedIn {
 		// start retrieval process
 		$this->setToken(array('oauth_token' => $token, 'oauth_token_secret' => $secret));
 		$parameters = array(
-			'oauth_verifier' => $verifier
+			'oauth_verifier' => $verifier,
 		);
 		$response = $this->fetch(self::_METHOD_TOKENS, self::_URL_ACCESS, NULL, $parameters);
 		parse_str($response['linkedin'], $response['linkedin']);
@@ -1916,9 +1916,9 @@ class LinkedIn {
 	public function retrieveTokenRequest() {
 		$parameters = array(
 			'oauth_callback' => $this->getCallbackUrl(),
-			'scope' => $this->scope,
 		);
-		$response = $this->fetch(self::_METHOD_TOKENS, self::_URL_REQUEST, NULL, $parameters);
+		$url = self::_URL_REQUEST . '?scope=' . $this->scope;
+		$response = $this->fetch(self::_METHOD_TOKENS, $url, NULL, $parameters);
 		parse_str($response['linkedin'], $response['linkedin']);
 
 		/**

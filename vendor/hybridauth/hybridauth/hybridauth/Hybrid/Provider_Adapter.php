@@ -296,7 +296,7 @@ class Hybrid_Provider_Adapter
 	* return the provider config by id
 	*/
 	function getConfigById( $id )
-	{
+	{	
 		if( isset( Hybrid_Auth::$config["providers"][$id] ) ){
 			return Hybrid_Auth::$config["providers"][$id];
 		}

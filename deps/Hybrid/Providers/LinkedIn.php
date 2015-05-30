@@ -28,11 +28,12 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 		}
 		require_once (dirname(dirname(__FILE__))) . "/thirdparty/LinkedIn/LinkedIn.php";
 
+		$this->scope = $this->config['scope'];
 		$this->api = new LinkedIn(array(
 			'appKey' => $this->config["keys"]["key"],
 			'appSecret' => $this->config["keys"]["secret"],
 			'callbackUrl' => $this->endpoint,
-			'scope' => $this->config['scope'],
+			'scope' => $this->scope,
 		));
 
 		if ($this->token("access_token_linkedin")) {
@@ -46,7 +47,7 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	function loginBegin() {
 		// send a request for a LinkedIn access token
 		$response = $this->api->retrieveTokenRequest();
-
+		
 		if (isset($response['success']) && $response['success'] === TRUE) {
 			$this->token("oauth_token", $response['linkedin']['oauth_token']);
 			$this->token("oauth_token_secret", $response['linkedin']['oauth_token_secret']);

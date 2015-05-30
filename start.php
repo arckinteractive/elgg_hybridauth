@@ -113,6 +113,15 @@ function elgg_hybridauth_public_pages($hook, $type, $return, $params) {
 	return $return;
 }
 
+/**
+ * Prepares HybridAuth config
+ *
+ * @param string $hook   "config"
+ * @param string $type   "hybridauth"
+ * @param array  $return Config
+ * @param array  $params Hook Params
+ * @return array
+ */
 function elgg_hybridauth_config($hook, $type, $return, $params) {
 
 	$return = (array) $return;
@@ -214,7 +223,7 @@ function elgg_hybridauth_upgrade() {
 
 		// Linked upgrade is breaking things
 		if (empty($providers['LinkedIn']['scope'])) {
-			$providers['LinkedIn']['scope'] = 'r_basicprofile+w_share';
+			$providers['LinkedIn']['scope'] = 'r_basicprofile+w_share+rw_company_admin';
 		}
 
 		elgg_set_plugin_setting('__upgrade_20150530', true, 'elgg_hybridauth');

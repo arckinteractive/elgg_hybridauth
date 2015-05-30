@@ -86,7 +86,7 @@ class Hybrid_Auth
 		if ( ! class_exists("Hybrid_Storage", false) ){
 			require_once $config["path_base"] . "Storage.php";
         	}
-
+		
 		// hash given config
 		Hybrid_Auth::$config = $config;
 

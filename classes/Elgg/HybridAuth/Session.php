@@ -98,11 +98,7 @@ class Session {
 	 * @return \Hybrid_Auth
 	 */
 	public function getClient() {
-		if (isset($this->client)) {
-			return $this->client;
-		}
-		$this->client = new \Hybrid_Auth($this->getConfig());
-		return $this->client;
+		return new \Hybrid_Auth($this->getConfig());
 	}
 
 	/**
