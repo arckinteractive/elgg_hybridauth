@@ -22,10 +22,10 @@ if (is_null($providers)) {
 			"enabled" => false,
 			"keys" => array("id" => "", "secret" => ""),
 		),
-                "Instagram" => array (
-                        "enabled" => false,
-                        "keys"    => array ( "id" => "", "secret" => "" )
-                ),
+		"Instagram" => array(
+			"enabled" => false,
+			"keys" => array("id" => "", "secret" => "")
+		),
 		"Twitter" => array(
 			"enabled" => false,
 			"keys" => array("key" => "", "secret" => "")
@@ -35,10 +35,6 @@ if (is_null($providers)) {
 			"enabled" => false,
 			"keys" => array("id" => "", "secret" => "")
 		),
-//		"MySpace" => array(
-//			"enabled" => false,
-//			"keys" => array("key" => "", "secret" => "")
-//		),
 		"LinkedIn" => array(
 			"enabled" => false,
 			"keys" => array("key" => "", "secret" => "")

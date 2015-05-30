@@ -4,22 +4,68 @@ if (!elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')) {
 	gatekeeper();
 }
 
-$user = elgg_get_logged_in_user_entity();
+$session_owner_guid = get_input('session_owner_guid');
+$session_owner = get_entity($session_owner_guid);
+$session_name = get_input('session_name');
+$session_handle = get_input('session_handle');
 
-$ha_session = new Elgg\HybridAuth\Session($user);
-$provider = $ha_session->getProvider(get_input('provider'));
+$user = ($session_owner) ? : elgg_get_logged_in_user_entity();
+
+$ha_session = new Elgg\HybridAuth\Session($user, $session_name, $session_handle);
+
+$provider_name = get_input('provider');
+$provider = $ha_session->getProvider($provider_name);
 
 if (!$provider) {
 	forward(REFERRER, '400'); // bad request
 }
 
-$profile = $ha_session->authenticate($provider);
+$scope = get_input('scope');
+if ($scope) {
+	$uid = (int) $ha_session->isAuthenticated($provider);
+
+	if (empty($_SESSION["HA:$provider_name:last_scope:$uid"])) {
+		$_SESSION["HA:$provider_name:last_scope:$uid"] = 'default';
+	}
+
+	if ($_SESSION["HA:$provider_name:last_scope:$uid"] != $scope) {
+		// Check if scope has been explicitly required
+		// Logout the user, and reauthenticate with the requested scope
+		$config = $ha_session->getConfig();
+		if (!empty($config['providers'][$provider_name])) {
+			$config['providers'][$provider_name]['scope'] = urldecode($scope);
+		}
+		$ha_session->setConfig($config);
+		$ha_session->getAdapter($provider)->logout();
+		$ha_session->save();
+		$_SESSION["HA:$provider_name:last_scope:$uid"] = $scope;
+	}
+}
+
+$save_auth = $user ? true : false;
+$profile = $ha_session->authenticate($provider, $save_auth);
 if (!$profile) {
 	echo elgg_view('resources/hybridauth/error', array(
 		'provider' => $provider->getName(),
 		'error' => get_input('error'),
 	));
 	return;
+}
+
+$elgg_forward_url = get_input('elgg_forward_url');
+if ($elgg_forward_url) {
+	$forward_url = urldecode($elgg_forward_url);
+} else {
+	$query = parse_url(current_page_url(), PHP_URL_QUERY);
+	if ($user) {
+		$forward_url = "settings/user/{$user->username}?{$query}";
+	} else {
+		$forward_url = "?{$query}";
+	}
+}
+
+if ($session_handle && $session_handle != \Elgg\HybridAuth\Session::DEFAULT_HANDLE) {
+	forward($forward_url);
 }
 
 // Does this user profile exist?
@@ -42,13 +88,7 @@ if (elgg_is_logged_in()) {
 		// Linking provider profile to an existing account
 		$ha_session->addAuthRecord($provider, $profile->identifier);
 		system_message(elgg_echo('hybridauth:link:provider', array($provider->getName())));
-
-		if ($elgg_forward_url = get_input('elgg_forward_url')) {
-			forward(urldecode($elgg_forward_url));
-		} else {
-			$query = parse_url(current_page_url(), PHP_URL_QUERY);
-			forward("settings/user/" . elgg_get_logged_in_user_entity()->username . '?' . $query);
-		}
+		forward($forward_url);
 	} else {
 		// Another user has already linked this profile
 		$ha_session->deauthenticate($provider, false);

@@ -7,6 +7,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 elgg_register_event_handler('init', 'system', 'elgg_hybridauth_init');
+elgg_register_event_handler('upgrade', 'system', 'elgg_hybridauth_upgrade');
 
 /**
  * Initialize the plugin
@@ -33,6 +34,8 @@ function elgg_hybridauth_init() {
 	elgg_register_simplecache_view('js/hybridauth/core');
 
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'elgg_hybridauth_public_pages');
+
+	elgg_register_plugin_hook_handler('config', 'hybridauth', 'elgg_hybridauth_config');
 
 	elgg_register_event_handler('login', 'user', 'elgg_hybridauth_aux_provider');
 	//elgg_register_event_handler('login', 'user', 'elgg_hybridauth_authenticate_all_providers');
@@ -110,6 +113,34 @@ function elgg_hybridauth_public_pages($hook, $type, $return, $params) {
 	return $return;
 }
 
+function elgg_hybridauth_config($hook, $type, $return, $params) {
+
+	$return = (array) $return;
+
+	$defaults = array(
+		'base_url' => elgg_normalize_url('hybridauth/endpoint'),
+		'debug_mode' => (bool) elgg_get_plugin_setting('debug_mode', 'elgg_hybridauth'),
+		'debug_file' => elgg_get_config('dataroot') . 'elgg_hybridauth_debug',
+		'providers' => unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'))
+	);
+
+	$return = array_merge($defaults, $return);
+
+	// Replace default LinkedIn lib
+	$return['providers']['LinkedIn']['wrapper'] = array(
+		'path' => elgg_get_plugins_path() . 'elgg_hybridauth/deps/Hybrid/Providers/LinkedIn.php',
+		'class' => 'Hybrid_Providers_LinkedIn'
+	);
+
+	// This was included into the vendor lib and composer update removes it
+	$return['providers']['Instagram']['wrapper'] = array(
+		'path' => elgg_get_plugins_path() . '/elgg_hybridauth/vendor/hybridauth/hybridauth/additional-providers/hybridauth-instagram/Providers/Instagram.php',
+		'class' => 'Hybrid_Providers_Instagram',
+	);
+
+	return $return;
+}
+
 /**
  * Add an additional provider to the list of providers the user is authenticated with
  *
@@ -166,4 +197,27 @@ function elgg_hybridauth_authenticate_all_providers($event, $type, $user) {
 	}
 
 	return true;
+}
+
+/**
+ * Upgrade scripts go here
+ * @return type
+ */
+function elgg_hybridauth_upgrade() {
+	if (!elgg_is_admin_logged_in()) {
+		return;
+	}
+
+	if (!elgg_get_plugin_setting('__upgrade_20150530', 'elgg_hybridauth')) {
+
+		$providers = unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'));
+
+		// Linked upgrade is breaking things
+		if (empty($providers['LinkedIn']['scope'])) {
+			$providers['LinkedIn']['scope'] = 'r_basicprofile+w_share';
+		}
+
+		elgg_set_plugin_setting('__upgrade_20150530', true, 'elgg_hybridauth');
+		elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');
+	}
 }

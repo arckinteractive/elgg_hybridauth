@@ -130,3 +130,7 @@ Call ```elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')``` where neede
 
 * ```base_url``` and ```debug_file``` are no longer set via plugin settings.
 They are set dynamically using current installation path and wwwroot.
+
+* Due to recent changes in LinkedIn scopes, HybridAuth was producing unreliable results.
+HA LinkedIn class and LinkedIn wrapper were replaced with custom implementation for the sake of stability.
+https://developer.linkedin.com/support/developer-program-transition

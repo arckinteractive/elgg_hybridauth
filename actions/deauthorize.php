@@ -9,7 +9,11 @@ if (!$provider || !$user) {
 	forward('', '404');
 }
 
-$ha_session = new \Elgg\HybridAuth\Session($user);
+$session_name = get_input('session_name');
+$session_handle = get_input('session_handle');
+
+$ha_session = new Elgg\HybridAuth\Session($user, $session_name, $session_handle);
+
 $ha_provider = $ha_session->getProvider($provider);
 
 if (!$ha_provider) {

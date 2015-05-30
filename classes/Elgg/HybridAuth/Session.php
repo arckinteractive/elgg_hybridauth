@@ -43,16 +43,10 @@ class Session {
 	 * @param string    $name   Session name
 	 * @param string    $handle Handle used to store auth records
 	 */
-	public function __construct(\ElggUser $user = null, $name = self::DEFAULT_SESSION_NAME, $handle = self::DEFAULT_HANDLE) {
+	public function __construct(\ElggUser $user = null, $name = null, $handle = null) {
 		$this->user = ($user) ? : elgg_get_logged_in_user_entity();
-		$this->name = $name;
-		$this->handle = $handle;
-		$this->config = array(
-			'base_url' => elgg_normalize_url('hybridauth/endpoint'),
-			'debug_mode' => (bool) elgg_get_plugin_setting('debug_mode', 'elgg_hybridauth'),
-			'debug_file' => elgg_get_plugins_path() . 'elgg_hybridauth/debug.info',
-			'providers' => unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'))
-		);
+		$this->name = ($name) ?: self::DEFAULT_SESSION_NAME;
+		$this->handle = ($handle) ? : self::DEFAULT_HANDLE;
 		$this->persistent = (bool) elgg_get_plugin_setting('persistent_session', 'elgg_hybridauth');
 	}
 
@@ -72,7 +66,7 @@ class Session {
 	 * @return array
 	 */
 	public function getConfig() {
-		return $this->config;
+		return elgg_trigger_plugin_hook('config', 'hybridauth', array('session' => $this), $this->config);
 	}
 
 	/**
@@ -107,7 +101,7 @@ class Session {
 		if (isset($this->client)) {
 			return $this->client;
 		}
-		$this->client = new \Hybrid_Auth($this->config);
+		$this->client = new \Hybrid_Auth($this->getConfig());
 		return $this->client;
 	}
 
@@ -312,7 +306,7 @@ class Session {
 		} catch (\Exception $e) {
 			elgg_log($e->getMessage(), 'ERROR');
 			set_input('error', $e->getMessage());
-			$this->deauthenticate();
+			$this->deauthenticate($provider);
 		}
 
 		return $profile;

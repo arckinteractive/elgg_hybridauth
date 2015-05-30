@@ -79,7 +79,7 @@ class Hybrid_Provider_Adapter
 		if( ! $this->config["enabled"] ){
 			throw new Exception( "The provider '{$this->id}' is not enabled.", 3 );
 		}
-
+		
 		# include the adapter wrapper
 		if( isset( $this->config["wrapper"] ) && is_array( $this->config["wrapper"] ) ){
 			if (isset( $this->config["wrapper"]["path"] )) {

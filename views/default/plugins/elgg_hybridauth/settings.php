@@ -129,7 +129,7 @@ foreach ($providers as $provider => $settings) {
 
 			$scope = (isset($settings['scope'])) ? $settings['scope'] : null;
 			if (!$scope) {
-				$adapter = (new \Elgg\HybridAuth\Session)->getClient()->getAdapater($provider);
+				$adapter = (new \Elgg\HybridAuth\Session)->getClient()->getAdapter($provider);
 				$scope = ($adapter) ? $adapter->adapter->scope : null;
 			}
 			
