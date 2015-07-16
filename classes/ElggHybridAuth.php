@@ -1,19 +1,23 @@
 <?php
 
-class ElggHybridAuth extends Hybrid_Auth {
+class ElggHybridAuth {
 
+	/**
+	 * Constructor
+	 * @deprecated since version 1.3 Use \Elgg\HybridAuth\Client
+	 */
 	public function __construct() {
-
-		$config = array(
-			'base_url' => elgg_get_plugin_setting('base_url', 'elgg_hybridauth'),
-			'debug_mode' => elgg_get_plugin_setting('debug_mode', 'elgg_hybridauth'),
-			'debug_file' => elgg_get_plugin_setting('debug_file', 'elgg_hybridauth'),
-			'providers' => unserialize(elgg_get_plugin_setting('providers', 'elgg_hybridauth'))
-		);
-		
-		parent::__construct($config);
+		$this->client = (new \Elgg\HybridAuth\Session())->getClient();
 	}
 
+	/**
+	 * Magic method to make calls on a HybridAuth client
+	 *
+	 * @param string $name      Method name
+	 * @param array  $arguments Method arguments
+	 * @return mixed
+	 */
+	public function __call($name, $arguments) {
+		return call_user_func_array(array($this->client, $name), $arguments);
+	}
 }
-
-?>

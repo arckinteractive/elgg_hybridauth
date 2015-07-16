@@ -22,10 +22,10 @@ if (is_null($providers)) {
 			"enabled" => false,
 			"keys" => array("id" => "", "secret" => ""),
 		),
-                "Instagram" => array (
-                        "enabled" => false,
-                        "keys"    => array ( "id" => "", "secret" => "" )
-                ),
+		"Instagram" => array(
+			"enabled" => false,
+			"keys" => array("id" => "", "secret" => "")
+		),
 		"Twitter" => array(
 			"enabled" => false,
 			"keys" => array("key" => "", "secret" => "")
@@ -35,10 +35,6 @@ if (is_null($providers)) {
 			"enabled" => false,
 			"keys" => array("id" => "", "secret" => "")
 		),
-//		"MySpace" => array(
-//			"enabled" => false,
-//			"keys" => array("key" => "", "secret" => "")
-//		),
 		"LinkedIn" => array(
 			"enabled" => false,
 			"keys" => array("key" => "", "secret" => "")
@@ -66,11 +62,16 @@ if (is_null($providers)) {
 }
 
 elgg_set_plugin_setting('providers', serialize($providers), 'elgg_hybridauth');
-
-elgg_set_plugin_setting('base_url', elgg_normalize_url('hybridauth/endpoint'), 'elgg_hybridauth');
 elgg_set_plugin_setting('debug_mode', false, 'elgg_hybridauth');
-elgg_set_plugin_setting('debug_file', elgg_get_plugins_path() . 'elgg_hybridauth/debug.info', 'elgg_hybridauth');
 
 if (is_null(elgg_get_plugin_setting('public_auth', 'elgg_hybridauth'))) {
 	elgg_set_plugin_setting('public_auth', true, 'elgg_hybridauth');
 }
+
+if (is_null(elgg_get_plugin_setting('persistent_session', 'elgg_hybridauth'))) {
+	elgg_set_plugin_setting('persistent_session', false, 'elgg_hybridauth');
+}
+
+// @since 1.3 these are determined dynamically
+elgg_unset_plugin_setting('base_url', 'elgg_hybridauth');
+elgg_unset_plugin_setting('debug_file', 'elgg_hybridauth');

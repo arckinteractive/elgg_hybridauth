@@ -1,9 +1,6 @@
 <?php
 
-$ha_provider = $provider = get_input('provider');
-if (get_input('openid')) {
-	$ha_provider = 'OpenID';
-}
+$provider = get_input('provider');
 
 $guid = get_input('guid');
 $user = get_entity($guid);
@@ -12,18 +9,21 @@ if (!$provider || !$user) {
 	forward('', '404');
 }
 
-$ha = new ElggHybridAuth();
+$session_name = get_input('session_name');
+$session_handle = get_input('session_handle');
 
-try {
-	$adapter = $ha->getAdapter($ha_provider);
-	if ($adapter->isUserConnected()) {
-		$adapter->logout();
-	}
-	elgg_unset_plugin_user_setting("$provider:uid", $user->guid, 'elgg_hybridauth');
-	elgg_trigger_plugin_hook('hybridauth:deauthenticate', $provider, array('entity' => $user));
+$ha_session = new Elgg\HybridAuth\Session($user, $session_name, $session_handle);
+
+$ha_provider = $ha_session->getProvider($provider);
+
+if (!$ha_provider) {
+	forward('', '404');
+}
+
+if ($ha_session->deauthenticate($ha_provider)) {
 	system_message(elgg_echo('hybridauth:provider:user:deauthorized'));
-} catch (Exception $e) {
-	register_error($e->getMessage());
+} else {
+	register_error(elgg_echo('hybridauth:provider:user:deauthorized:error'));
 }
 
 forward(REFERER);

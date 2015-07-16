@@ -46,6 +46,12 @@ $english = array(
 	'hybridauth:debug_mode:enable' => 'On',
 	'hybridauth:debug_mode:disable' => 'Off',
 
+	'hybridauth:persistent_session' => 'Persistent User Sessions',
+	'hybridauth:persistent_session:help' => 'Do not enable this option if you are only using hybridauth for login and registration. '
+							. 'This feature is designed to persist user sessions for better integration with provider APIs',
+	'hybridauth:persistent_session:enable' => 'On',
+	'hybridauth:persistent_session:disable' => 'Off',
+
 	'hybridauth:provider:enable' => 'Enable this provider',
 	'hybridauth:provider:enabled' => 'Enable',
 	'hybridauth:provider:disabled' => 'Disable',
@@ -80,6 +86,8 @@ $english = array(
 	'hybridauth:adapter:pass' => 'Service is active',
 
 	'hybridauth:connect' => 'or connect with:',
+	'hybridauth:error' => 'An error has occurred, and has been logged. Please contact the site administrator if the error persists',
+	'hybridauth:try_again' => 'Try again',
 	'hybridauth:login:provider' => 'You have been logged in using your %s account',
 	'hybridauth:link:provider' => 'You have successfully linked your account with %s',
 	'hybridauth:link:provider:error' => 'This %s account has already been linked to another profile in the system. Please log in using that profile to deauthorize it, or link this profile to another account',
@@ -103,6 +111,7 @@ $english = array(
 	'hybridauth:provider:user:deauthorize' => 'Disconnect now',
 	'hybridauth:provider:user:authenticated' => 'You have successfully linked your acount to this provider',
 	'hybridauth:provider:user:deauthorized' => 'You have successfully unlinked your acount from this provider',
+	'hybridauth:provider:user:deauthorized:error' => 'Your acount could not be disconnected from this provider',
 	
 	'hybridauth:registration_instructions' => "Registration instructions",
 	'hybridauth:registration_instructions:help' => "Any instructions or information you need to relay to users after they have authenticated with an external provider but before they complete their registration",

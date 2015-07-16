@@ -1,10 +1,7 @@
-elgg_hybridauth
-===============
-
 HybridAuth Client for Elgg
 --------------------------
 
-HybridAuth Client for Elgg is an authentication tool that allows users to create new Elgg accounts using their social media accounts.
+*elgg_hybridauth* is an authentication tool that allows users to create new Elgg accounts using their social media accounts.
 
 Providers included by default:
 * AOL
@@ -124,74 +121,16 @@ function elgg_hybridauth_on_authenticate($hook, $provider, $return, $params) {
 ```
 
 
-#### Persistent hybriauth sessions
+## Upgrading
 
-If you are using the plugin for interactions with the provider APIs, you may
-want to implement persistent sessions, so that users are not prompted to
-authorize their accounts every time they want to post or import data.
+### To 1.3
 
-```php
+* For performance reasons, ```HYBRIDAUTH_PUBLIC_AUTH``` is not longer defined.
+Call ```elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')``` where needed.
 
-	elgg_register_event_handler('init', 'system', '_persist_hybridauth_session', 1);
-	elgg_register_plugin_hook_handler('hybridauth:authenticate', 'all', '_store_hybridauth_session');
-	elgg_register_plugin_hook_handler('hybridauth:deauthenticate', 'all', '_store_hybridauth_session');
+* ```base_url``` and ```debug_file``` are no longer set via plugin settings.
+They are set dynamically using current installation path and wwwroot.
 
-	/**
-	 * Store hybridauth session information, so that it can be restored when user logs in
-	 *
-	 * @param string $hook
-	 * @param string $type
-	 * @param mixed $return
-	 * @param array $params
-	 * @return mixed
-	 */
-	function simplur_register_store_hybridauth_session($hook, $type, $return, $params) {
-
-		$entity = elgg_extract('entity', $params);
-
-		try {
-
-			$ha = new ElggHybridAuth();
-			$hybridauth_session_data = $ha->getSessionData();
-			elgg_set_plugin_user_setting('hybridauth_session_data', $hybridauth_session_data, $entity->guid, 'elgg_hybridauth');
-			elgg_set_plugin_user_setting('hybridauth_session_id', session_id(), $entity->guid, 'elgg_hybridauth');
-		} catch (Exception $e) {
-			error_log($e->getMessage());
-			// Something is wrong, but whatever
-		}
-
-		return $return;
-	}
-
-	/**
-	 * Restore hybrdiauth session
-	 * @return boolean
-	 */
-	function simplur_register_persist_hybridauth_session() {
-
-		$user = elgg_get_logged_in_user_entity();
-		if (!$user) {
-			return true;
-		}
-
-		if (elgg_in_context('hybridauth')) {
-			return true;
-		}
-		try {
-
-			$session_id = elgg_get_plugin_user_setting('hybridauth_session_id', $user->guid, 'elgg_hybridauth');
-			if ($session_id && session_id() !== $session_id) {
-				error_log('Restoring hybridauth session');
-				$stored_session_data = elgg_get_plugin_user_setting('hybridauth_session_data', $user->guid, 'elgg_hybridauth');
-				$ha = new ElggHybridAuth();
-				$ha->restoreSessionData($stored_session_data);
-				elgg_set_plugin_user_setting('hybridauth_session_id', session_id(), $user->guid, 'elgg_hybridauth');
-			}
-		} catch (Exception $e) {
-			error_log($e->getMessage());
-			// Something is wrong, but whatever
-		}
-
-		return true;
-	}
-```
+* Due to recent changes in LinkedIn scopes, HybridAuth was producing unreliable results.
+HA LinkedIn class and LinkedIn wrapper were replaced with custom implementation for the sake of stability.
+https://developer.linkedin.com/support/developer-program-transition

@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "15ba35f82b2222378f6ab0b284d04576",
+    "hash": "283d01909c53e9668012d96d20718dff",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "dev-master",
+            "version": "v1.0.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "41cf781ed1271e25bf31b715416a349996aa2527"
+                "reference": "d64e23fce42a4063d63262b19b8e7c0f3b5e4c45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/41cf781ed1271e25bf31b715416a349996aa2527",
-                "reference": "41cf781ed1271e25bf31b715416a349996aa2527",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d64e23fce42a4063d63262b19b8e7c0f3b5e4c45",
+                "reference": "d64e23fce42a4063d63262b19b8e7c0f3b5e4c45",
                 "shasum": ""
             },
             "replace": {
@@ -59,8 +59,11 @@
                 "Hurad",
                 "MODX Evo",
                 "OXID",
+                "SMF",
+                "Thelia",
                 "WolfCMS",
                 "agl",
+                "aimeos",
                 "annotatecms",
                 "bitrix",
                 "cakephp",
@@ -68,9 +71,11 @@
                 "codeigniter",
                 "concrete5",
                 "croogo",
+                "dokuwiki",
                 "drupal",
                 "elgg",
                 "fuelphp",
+                "grav",
                 "installer",
                 "joomla",
                 "kohana",
@@ -94,20 +99,20 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-07-22 17:04:15"
+            "time": "2015-02-18 17:17:01"
         },
         {
             "name": "hybridauth/hybridauth",
-            "version": "v2.2.2",
+            "version": "v2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hybridauth/hybridauth.git",
-                "reference": "b32c4bf14007c80118a88c5e249f4e3151585732"
+                "reference": "89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/b32c4bf14007c80118a88c5e249f4e3151585732",
-                "reference": "b32c4bf14007c80118a88c5e249f4e3151585732",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca",
+                "reference": "89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +123,10 @@
             "autoload": {
                 "psr-0": {
                     "Hybrid": "hybridauth/"
-                }
+                },
+                "classmap": [
+                    "hybridauth/Hybrid"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -143,24 +151,17 @@
                 "twitter",
                 "yahoo"
             ],
-            "time": "2014-07-11 20:25:12"
+            "time": "2015-04-12 01:39:53"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
-    "minimum-stability": "dev",
-    "stability-flags": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.4"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
