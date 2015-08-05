@@ -55,7 +55,7 @@ if (!$profile) {
 	return;
 }
 
-$elgg_forward_url = get_input('elgg_forward_url');
+$elgg_forward_url = get_input('elgg_forward_url', $_SESSION['last_forward_from']);
 if ($elgg_forward_url) {
 	$forward_url = urldecode($elgg_forward_url);
 } else {
@@ -135,7 +135,7 @@ if ($users) {
 		$user_to_login->elgg_hybridauth_login = 1;
 		login($user_to_login);
 		system_message(elgg_echo('hybridauth:login:provider', array($provider->getName())));
-		forward();
+		forward($forward_url);
 	}
 }
 
@@ -160,7 +160,7 @@ if ($email && $users = get_user_by_email($email)) {
 	$user_to_login->elgg_hybridauth_login = 1;
 	login($user_to_login);
 	system_message(elgg_echo('hybridauth:login:provider', array($provider->getName())));
-	forward();
+	forward($forward_url);
 } else {
 
 	$title = elgg_echo('hybridauth:register');
