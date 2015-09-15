@@ -60,7 +60,9 @@ if (elgg_get_config('allow_registration')) {
 		if (strcmp($password, $password2) != 0) {
 			throw new RegistrationException(elgg_echo('RegistrationException:PasswordMismatch'));
 		}
-
+		if ($verified) {
+			elgg_unregister_plugin_hook_handler('register', 'user', 'uservalidationbyemail_disable_new_user');
+		}
 		$guid = register_user($username, $password, $name, $email, false, $friend_guid, $invitecode);
 
 		if ($guid) {
