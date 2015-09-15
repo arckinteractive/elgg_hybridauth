@@ -37,7 +37,7 @@ function elgg_hybridauth_init() {
 
 	elgg_register_plugin_hook_handler('config', 'hybridauth', 'elgg_hybridauth_config');
 
-	elgg_register_event_handler('login', 'user', 'elgg_hybridauth_aux_provider');
+	elgg_register_event_handler('login:before', 'user', 'elgg_hybridauth_aux_provider');
 	//elgg_register_event_handler('login', 'user', 'elgg_hybridauth_authenticate_all_providers');
 
 	elgg_register_menu_item('page', array(
