@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "283d01909c53e9668012d96d20718dff",
+    "hash": "5c656d2e4d805d534b71000bd4a21776",
+    "content-hash": "e6d8d0262ddf6834749c3c2ed7cea3d7",
     "packages": [
         {
             "name": "composer/installers",
@@ -103,16 +104,16 @@
         },
         {
             "name": "hybridauth/hybridauth",
-            "version": "v2.4.1",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hybridauth/hybridauth.git",
-                "reference": "89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca"
+                "reference": "e261094cbb527b2174ca6c1cc00a0ea6a590c79e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca",
-                "reference": "89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/e261094cbb527b2174ca6c1cc00a0ea6a590c79e",
+                "reference": "e261094cbb527b2174ca6c1cc00a0ea6a590c79e",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +152,7 @@
                 "twitter",
                 "yahoo"
             ],
-            "time": "2015-04-12 01:39:53"
+            "time": "2015-09-07 15:07:06"
         }
     ],
     "packages-dev": [],

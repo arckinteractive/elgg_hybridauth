@@ -98,24 +98,24 @@
     },
     {
         "name": "hybridauth/hybridauth",
-        "version": "v2.4.1",
-        "version_normalized": "2.4.1.0",
+        "version": "v2.5.0",
+        "version_normalized": "2.5.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/hybridauth/hybridauth.git",
-            "reference": "89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca"
+            "reference": "e261094cbb527b2174ca6c1cc00a0ea6a590c79e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca",
-            "reference": "89e4dc3da3a55cf3ffb00a428c247ff2166dc7ca",
+            "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/e261094cbb527b2174ca6c1cc00a0ea6a590c79e",
+            "reference": "e261094cbb527b2174ca6c1cc00a0ea6a590c79e",
             "shasum": ""
         },
         "require": {
             "ext-curl": "*",
             "php": ">=5.2.0"
         },
-        "time": "2015-04-12 01:39:53",
+        "time": "2015-09-07 15:07:06",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

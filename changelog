@@ -38,3 +38,7 @@
 
 1.3.1
 -- forward user to correct location after login (using default Elgg session referrer)
+
+1.4.1
+-- upgrade hybridauth lib
+-- remove deprecated event handler

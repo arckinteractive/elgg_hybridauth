@@ -738,7 +738,7 @@ abstract class BaseFacebook
    *               code could not be determined.
    */
   protected function getCode() {
-    if (!isset($_REQUEST['code']) || !isset($_REQUEST['state'])) {
+    if (!isset($_REQUEST['code']) || !isset($_REQUEST['state']) || $this->state === null) {
       return false;
     }
     if ($this->state === $_REQUEST['state']) {
@@ -1234,7 +1234,7 @@ abstract class BaseFacebook
    * @return string The HTTP Host
    */
   protected function getHttpHost() {
-    if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+    if ($this->trustForwarded && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
       $forwardProxies = explode(',', $_SERVER['HTTP_X_FORWARDED_HOST']);
       if (!empty($forwardProxies)) {
         return $forwardProxies[0];
@@ -1249,7 +1249,7 @@ abstract class BaseFacebook
    * @return string The HTTP Protocol
    */
   protected function getHttpProtocol() {
-    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    if ($this->trustForwarded && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
       if ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
         return 'https';
       }
@@ -1488,7 +1488,7 @@ abstract class BaseFacebook
    * @param string $big   The value to be checked against $small
    * @param string $small The input string
    *
-   * @return boolean Returns TRUE if $big matches $small
+   * @return boolean Returns true if $big matches $small
    */
   protected static function isAllowedDomain($big, $small) {
     if ($big === $small) {
@@ -1503,7 +1503,7 @@ abstract class BaseFacebook
    * @param string $big   The value to be checked against $small
    * @param string $small The input string
    *
-   * @return boolean TRUE if $big ends with $small
+   * @return boolean true if $big ends with $small
    */
   protected static function endsWith($big, $small) {
     $len = strlen($small);
