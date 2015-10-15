@@ -163,6 +163,11 @@ if ($email && $users = get_user_by_email($email)) {
 	forward($forward_url);
 } else {
 
+	if (!elgg_get_config('allow_registration')) {
+		register_error(elgg_echo('registerdisabled'));
+		forward('', '403');
+	}
+
 	$title = elgg_echo('hybridauth:register');
 	$content = elgg_view_form('hybridauth/register', array(), array(
 		'provider' => $provider->getName(),
