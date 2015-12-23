@@ -47,6 +47,8 @@ function elgg_hybridauth_init() {
 		'selected' => (elgg_in_context('hybridauth')),
 		'contexts' => array('settings'),
 	));
+
+	elgg_register_admin_menu_item('administer', 'hybridauth', 'administer_utilities');
 }
 
 /**

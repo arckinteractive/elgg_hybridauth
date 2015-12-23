@@ -127,6 +127,9 @@ $english = array(
 	'hybridauth:provider:openid:name:help' => 'Name of the OpenID provider (e.g. StackExchange)',
 	'hybridauth:provider:openid:identifier' => 'OpenID Identifier',
 	'hybridauth:provider:openid:identifier:help' => 'OpenID URL (e.g. https://openid.stackexchange.com)',
+	
+	'admin:administer_utilities:hybridauth' => 'HybridAuth Sessions',
+	'hybridauth:session_data' => 'Session Data',
 );
 
 add_translation("en", $english);
