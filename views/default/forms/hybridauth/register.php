@@ -202,5 +202,7 @@ if ($require_auth) {
 echo '</div>';
 
 
-
+if (elgg_is_active_plugin('profile_manager') && is_callable('elgg_require_js')) {
+	echo elgg_format_element('script', [], 'require(["profile_manager/register"]);');
+}
 
