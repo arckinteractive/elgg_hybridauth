@@ -39,6 +39,10 @@ Visit [http://hybridauth.sourceforge.net/](http://hybridauth.sourceforge.net/) f
 * Select Website with Facebook Login and enter your site URL
 * Copy your App ID and App Secret to corresponding fields in the plugin settings
 * For more on permissions scope, visit https://developers.facebook.com/docs/reference/login/
+* Make sure you have added a Website with URL as a Platform in App Settings
+* Make sure you have added configured your domains in App Settings
+* In Facebook Login settings, Enable Embbeded Brwoser OAuth Login
+* Add http://SITE-URL/hybridauth/endpoint as a Valid OAuth Redirect URI
 
 #### Setting up Twitter ####
 * Go to https://dev.twitter.com/apps/new
