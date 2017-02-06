@@ -23,7 +23,7 @@
 	"require": {
 		"php": ">=5.5",
 		"composer/installers": "~1.0",
-		"hybridauth/hybridauth": "~2.5"
+		"hybridauth/hybridauth": "~2.8"
 	}
 }
 
