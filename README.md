@@ -1,5 +1,6 @@
 HybridAuth Client for Elgg
 --------------------------
+![Elgg 2.3](https://img.shields.io/badge/Elgg-2.3-orange.svg?style=flat-square)
 
 *elgg_hybridauth* is an authentication tool that allows users to create new Elgg accounts using their social media accounts.
 

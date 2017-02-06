@@ -6,9 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'BaseFacebook' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/thirdparty/Facebook/base_facebook.php',
-    'Facebook' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/thirdparty/Facebook/facebook.php',
-    'FacebookApiException' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/thirdparty/Facebook/base_facebook.php',
     'Hybrid_Auth' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php',
     'Hybrid_Endpoint' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/Endpoint.php',
     'Hybrid_Error' => $vendorDir . '/hybridauth/hybridauth/hybridauth/Hybrid/Error.php',

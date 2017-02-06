@@ -4,7 +4,7 @@
  * Elgg HybridAuth
  */
 // Composer autoload
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/autoloader.php';
 
 elgg_register_event_handler('init', 'system', 'elgg_hybridauth_init');
 elgg_register_event_handler('upgrade', 'system', 'elgg_hybridauth_upgrade');
