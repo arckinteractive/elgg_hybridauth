@@ -121,24 +121,16 @@ if (elgg_get_config('allow_registration')) {
 			}
 
 			if ($photo_url) {
-				$icon_sizes = elgg_get_config('icon_sizes');
+				$tmp = new ElggFile();
+				$tmp->owner_guid = $new_user->guid;
+				$tmp->setFilename('tmp/icon.jpg');
+				$tmp->open('write');
+				$tmp->write(file_get_contents($photo_url));
+				$tmp->close();
 
-				$filehandler = new ElggFile();
-				$filehandler->owner_guid = $new_user->guid;
-				foreach ($icon_sizes as $size => $dimensions) {
-					$image = get_resized_image_from_existing_file(
-							$photo_url, $dimensions[0], $dimensions[1], $dimensions[2]
-					);
+				$new_user->saveIconFromElggFile($tmp);
 
-					$image = get_resized_image_from_existing_file($photo_url, $dimensions['w'], $dimensions['h'], $dimensions['square'], 0, 0, 0, 0, $dimensions['upscale']);
-
-					$filehandler->setFilename("profile/{$new_user->guid}{$size}.jpg");
-					$filehandler->open('write');
-					$filehandler->write($image);
-					$filehandler->close();
-				}
-
-				$new_user->icontime = time();
+				$tmp->delete();
 			}
 
 			if ($provider && $provider_uid) {
