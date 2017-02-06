@@ -16,13 +16,34 @@
 class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 
 	/**
-	 * IDp wrappers initializer
+	 * Provider API Wrapper
+	 * @var LinkedIn
+	 */
+	public $api;
+
+	/**
+	 * {@inheritdoc}
 	 */
 	function initialize() {
-		
 		if (!$this->config["keys"]["key"] || !$this->config["keys"]["secret"]) {
 			throw new Exception("Your application key and secret are required in order to connect to {$this->providerId}.", 4);
 		}
+
+		if (empty($this->config['fields'])) {
+			$this->config['fields'] = array(
+				'id',
+				'first-name',
+				'last-name',
+				'public-profile-url',
+				'picture-url',
+				'email-address',
+				'date-of-birth',
+				'phone-numbers',
+				'summary',
+				'positions'
+			);
+		}
+
 		if (!class_exists('OAuthConsumer', false)) {
 			require_once Hybrid_Auth::$config["path_libraries"] . "OAuth/OAuth.php";
 		}
@@ -42,7 +63,7 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	}
 
 	/**
-	 * begin login step
+	 * {@inheritdoc}
 	 */
 	function loginBegin() {
 		// send a request for a LinkedIn access token
@@ -60,13 +81,18 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	}
 
 	/**
-	 * finish login step
+	 * {@inheritdoc}
 	 */
 	function loginFinish() {
-		$oauth_token = $_REQUEST['oauth_token'];
-		$oauth_verifier = $_REQUEST['oauth_verifier'];
+        // in case we get oauth_problem=user_refused
+        if (isset($_REQUEST['oauth_problem']) && $_REQUEST['oauth_problem'] == "user_refused") {
+            throw new Exception("Authentication failed! The user denied your request.", 5);
+        }
 
-		if (!$oauth_verifier) {
+		$oauth_token = isset($_REQUEST['oauth_token']) ? $_REQUEST['oauth_token'] : null;
+		$oauth_verifier = isset($_REQUEST['oauth_verifier']) ? $_REQUEST['oauth_verifier'] : null;
+
+		if (!$oauth_token || !$oauth_verifier) {
 			throw new Exception("Authentication failed! {$this->providerId} returned an invalid Token.", 5);
 		}
 
@@ -88,12 +114,12 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	}
 
 	/**
-	 * load the user profile from the IDp api client
+	 * {@inheritdoc}
 	 */
 	function getUserProfile() {
 		try {
 			// http://developer.linkedin.com/docs/DOC-1061
-			$response = $this->api->profile('~:(id,first-name,last-name,public-profile-url,picture-url,email-address,date-of-birth,phone-numbers,summary)');
+			$response = $this->api->profile('~:('. implode(',', $this->config['fields']) .')');
 		} catch (LinkedInException $e) {
 			throw new Exception("User profile request failed! {$this->providerId} returned an error: $e", 6);
 		}
@@ -113,7 +139,22 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 			$this->user->profile->email = (string) $data->{'email-address'};
 			$this->user->profile->emailVerified = (string) $data->{'email-address'};
 
+			if ($data->{'positions'}) {
+        $this->user->profile->job_title = (string) $data->{'positions'}->{'position'}->{'title'};
+        $this->user->profile->organization_name = (string) $data->{'positions'}->{'position'}->{'company'}->{'name'};
+      }
+
+			if (isset($data->{'picture-url'})) {
 			$this->user->profile->photoURL = (string) $data->{'picture-url'};
+
+			} elseif (isset($data->{'picture-urls'})) {
+				// picture-urls::(original)
+				$this->user->profile->photoURL = (string) $data->{'picture-urls'}->{'picture-url'};
+
+			} else {
+				$this->user->profile->photoURL = "";
+			}
+
 			$this->user->profile->profileURL = (string) $data->{'public-profile-url'};
 			$this->user->profile->description = (string) $data->{'summary'};
 
@@ -136,7 +177,7 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	}
 
 	/**
-	 * load the user contacts
+	 * {@inheritdoc}
 	 */
 	function getUserContacts() {
 		try {
@@ -169,7 +210,7 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	}
 
 	/**
-	 * update user status
+	 * {@inheritdoc}
 	 */
 	function setUserStatus($status) {
 		$parameters = array();
@@ -208,6 +249,7 @@ class Hybrid_Providers_LinkedIn extends Hybrid_Provider_Model {
 	 * load the user latest activity
 	 *    - timeline : all the stream
 	 *    - me       : the user activity only
+	 * {@inheritdoc}
 	 */
 	function getUserActivity($stream) {
 		try {
