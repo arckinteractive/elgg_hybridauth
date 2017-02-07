@@ -127,6 +127,11 @@ $english = array(
 	'hybridauth:provider:openid:name:help' => 'Name of the OpenID provider (e.g. StackExchange)',
 	'hybridauth:provider:openid:identifier' => 'OpenID Identifier',
 	'hybridauth:provider:openid:identifier:help' => 'OpenID URL (e.g. https://openid.stackexchange.com)',
+
+	'hybridauth:metadata_import_mapping' => 'Imported metadata mapping',
+	'hybridauth:metadata_import_mapping:help' => 'Specify which metadata name should be assigned to the profile information retrieved from a provider that the user is registered with. Leave empty to not import the data',
+	'hybridauth:import_mapping_access_id' => 'Impoted metadata access level',
+	'hybridauth:import_mapping_access_id:help' => 'Access level to be assigned to metadata imported from provider profile',
 );
 
 add_translation("en", $english);

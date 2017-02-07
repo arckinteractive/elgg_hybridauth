@@ -132,7 +132,7 @@ foreach ($providers as $provider => $settings) {
 				$adapter = (new \Elgg\HybridAuth\Session)->getClient()->getAdapter($provider);
 				$scope = ($adapter) ? $adapter->adapter->scope : null;
 			}
-			
+
 			if ($scope) {
 				$mod .= '<div>';
 				$mod .= '<label>' . elgg_echo("hybridauth:provider:scope") . '</label>';
@@ -186,3 +186,66 @@ foreach ($providers as $provider => $settings) {
 
 	echo elgg_view_module('widget', $title, $mod, array('footer' => $footer, 'class' => 'hybridauth-provider-settings'));
 }
+
+$data = [
+	'description',
+	'website',
+	'first_name',
+	'last_name',
+	'gender',
+	'age',
+	'birthdate',
+	'contactemail',
+	'phone',
+	'address',
+	'country',
+	'region',
+	'city',
+	'zip',
+	'location',
+];
+
+$import_mapping = $entity->import_mapping;
+if (!isset($import_mapping)) {
+	// default settings
+	$fields = [
+		'description',
+		'website',
+		'first_name',
+		'last_name',
+		'gender',
+		'age',
+		'birthdate',
+		'contactemail',
+		'phone',
+	];
+	$import_mapping = array_combine($fields, $fields);
+} else {
+	$import_mapping = unserialize($import_mapping);
+}
+
+$mapping_fields = [];
+foreach ($data as $d) {
+	$mapping_fields[] = [
+		'#type' => 'text',
+		'#label' => $d,
+		'name' => "import_mapping[$d]",
+		'value' => elgg_extract($d, $import_mapping, ''),
+	];
+}
+
+echo elgg_view_field([
+	'#type' => 'fieldset',
+	'legend' => elgg_echo('hybridauth:metadata_import_mapping'),
+	'#help' => elgg_echo('hybridauth:metadata_import_mapping:help'),
+	'fields' => $mapping_fields,
+]);
+
+echo elgg_view_field([
+	'#type' => 'access',
+	'#label' => elgg_echo('hybridauth:import_mapping_access_id'),
+	'#help' => elgg_echo('hybridauth:import_mapping_access_id:help'),
+	'name' => 'import_mapping_access_id',
+	'value' => isset($entity->import_mapping_access_id) ? $entity->import_mapping_access_id : ACCESS_PRIVATE,
+]);
+

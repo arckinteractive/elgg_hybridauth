@@ -84,22 +84,19 @@ if (elgg_get_config('allow_registration')) {
 
 			$metadata = array(
 				'description' => get_input('description'),
-				"{$provider}_url" => get_input('profile_url'),
-				"$provider" => get_input($provider),
 				'website' => get_input('website_url'),
 				'first_name' => get_input('first_name'),
 				'last_name' => get_input('last_name'),
 				'gender' => get_input('gender'),
-				'language' => get_input('language'),
 				'age' => get_input('age'),
 				'birthdate' => mktime(0, 0, 0, get_input('birthmonth'), get_input('birthday'), get_input('birthyear')),
 				'contactemail' => get_input('contactemail'),
 				'phone' => get_input('phone'),
-//				'address' => get_input('address'),
-//				'country' => get_input('country'),
-//				'region' => get_input('region'),
-//				'city' => get_input('city'),
-//				'zip' => get_input('zip')
+				'address' => get_input('address'),
+				'country' => get_input('country'),
+				'region' => get_input('region'),
+				'city' => get_input('city'),
+				'zip' => get_input('zip'),
 			);
 
 			foreach (array('address', 'country', 'region', 'city', 'zip') as $location_element) {
@@ -116,8 +113,36 @@ if (elgg_get_config('allow_registration')) {
 				elgg_set_user_validation_status($new_user->guid, true, 'hybridauth');
 			}
 
+			$import_mapping = elgg_get_plugin_setting('import_mapping', 'elgg_hybridauth');
+			if (!isset($import_mapping)) {
+				// default settings
+				$fields = [
+					'description',
+					'website',
+					'first_name',
+					'last_name',
+					'gender',
+					'age',
+					'birthdate',
+					'contactemail',
+					'phone',
+				];
+				$import_mapping = array_combine($fields, $fields);
+			} else {
+				$import_mapping = unserialize($import_mapping);
+			}
+
+			$metadata["{$provider}_url"] = get_input('profile_url');
+			$metadata["$provider"] = get_input($provider);
+
+			$access_id = (int) elgg_get_plugin_setting('import_mapping_access_id', 'elgg_hybridauth', ACCESS_PRIVATE);
+
 			foreach ($metadata as $md_name => $md_value) {
-				create_metadata($new_user->guid, $md_name, $md_value, '', $new_user->guid, ACCESS_PRIVATE, true);
+				$mapped_name = $import_mapping[$md_name];
+				if (empty($mapped_name)) {
+					continue;
+				}
+				create_metadata($new_user->guid, $mapped_name, $md_value, '', $new_user->guid, $access_id, true);
 			}
 
 			if ($photo_url) {
