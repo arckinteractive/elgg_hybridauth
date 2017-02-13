@@ -11,3 +11,4 @@ robots.txt
 /vendor/
 composer.lock
 Gemfile.lock
+.env
