@@ -19,10 +19,22 @@ echo '<ul class="hybridauth-form-icons">';
 
 foreach ($providers as $provider) {
 	$name = $provider->getName();
+	
+	$url = elgg_normalize_url("hybridauth/authenticate");
+	$elements = [
+		'provider' => $name
+	];
+	if (get_input('friend_guid')) {
+		$elements['friend_guid'] = get_input('friend_guid');
+	}
+	if (get_input('invitecode')) {
+		$elements['invitecode'] = get_input('invitecode');
+	}
+	
 	echo '<li>';
 	echo elgg_view('output/url', array(
 		'text' => elgg_view_icon(strtolower("auth-$name-large")),
-		'href' => "hybridauth/authenticate?provider=$name",
+		'href' => elgg_http_add_url_query_elements($url, $elements),
 		'title' => $name,
 		'class' => 'hybridauth-start-authentication'
 	));
