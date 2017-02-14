@@ -6,10 +6,9 @@ $entity = elgg_extract('entity', $vars);
 
 $diagnostics = array(
 	'php_version' => (version_compare(PHP_VERSION, '5.2.0', '>=')),
-	//'elgg_oauth' => (!class_exists('OAuthException')), // @since 1.3 declared as conflict in plugin manifest
 	'curl' => (function_exists('curl_init')),
 	'json' => (function_exists('json_decode')),
-	'pecl_oauth' => (!extension_loaded('oauth'))
+	//'pecl_oauth' => (!extension_loaded('oauth')) //new versions of hybridauth *should* be compatible
 );
 
 foreach ($diagnostics as $requirement => $status) {
