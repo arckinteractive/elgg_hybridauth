@@ -70,11 +70,11 @@ function elgg_hybridauth_init() {
  */
 function elgg_hybridauth_page_handler($segments, $identifier) {
 
-	if (!isset($_SESSION['hybridauth'])) {
-		$_SESSION['hybridauth'] = array(
+	if (get_input('friend_guid') && get_input('invitecode')) {
+		$_SESSION['hybridauth'] = [
 			'friend_guid' => get_input('friend_guid'),
 			'invitecode' => get_input('invitecode')
-		);
+		];
 	}
 
 	switch ($segments[0]) {
