@@ -94,7 +94,9 @@ if (elgg_is_logged_in()) {
 		forward($forward_url);
 	} else {
 		// Another user has already linked this profile
-		$ha_session->deauthenticate($provider, false);
+		
+		// remove auth records to prevent them being re-assigned to another user
+		$ha_session->deauthenticate($provider, true);
 		echo elgg_view('resources/hybridauth/error', array(
 			'provider' => $provider->getName(),
 			'error' => elgg_echo('hybridauth:link:provider:error', array($provider->getName())),

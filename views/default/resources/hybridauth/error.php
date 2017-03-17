@@ -3,7 +3,7 @@
 $provider = elgg_extract('provider', $vars);
 $error = elgg_extract('error', $vars);
 
-$title = elgg_echo('error:default');
+$title = elgg_echo('hybridauth:error:default');
 $content = ($error) ? : elgg_echo('hybridauth:error', array($provider));
 
 $footer = '';

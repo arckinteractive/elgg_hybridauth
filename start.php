@@ -22,6 +22,7 @@ function elgg_hybridauth_init() {
 	elgg_register_action('hybridauth/deauthorize', __DIR__ . '/actions/deauthorize.php');
 	elgg_register_action('hybridauth/import/elgg_social_login', __DIR__ . '/actions/import/elgg_social_login.php', 'admin');
 	elgg_register_action('hybridauth/import/social_connect', __DIR__ . '/actions/import/social_connect.php', 'admin');
+	elgg_register_action('hybridauth/provider_reset', __DIR__ . '/actions/provider_reset.php', 'admin');
 
 	elgg_extend_view('forms/login', 'hybridauth/login');
 	elgg_extend_view('forms/hybridauth/login', 'hybridauth/aux_login');

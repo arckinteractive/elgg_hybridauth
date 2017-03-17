@@ -93,8 +93,15 @@ echo '</div>';
 
 $providers = ($entity->providers) ? unserialize($entity->providers) : array();
 foreach ($providers as $provider => $settings) {
-
-	$title = elgg_view_image_block(elgg_view_icon(strtolower("auth-$provider")), $provider);
+	$unset = elgg_view('output/url', [
+		'text' => elgg_echo('elgg_hybridauth:provider:uid:reset'),
+		'href' => 'action/hybridauth/provider_reset?provider=' . $provider,
+		'is_action' => true,
+		'confirm' => elgg_echo('elgg_hybridauth:provider:uid:reset:confirm'),
+		'class' => 'float-alt'
+	]);
+	
+	$title = elgg_view_image_block(elgg_view_icon(strtolower("auth-$provider")), $provider . $unset);
 
 	$mod = '<div>';
 	$mod .= '<label>' . elgg_echo('hybridauth:provider:enable') . '</label>';
