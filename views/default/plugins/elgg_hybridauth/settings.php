@@ -240,18 +240,38 @@ foreach ($data as $d) {
 	];
 }
 
-echo elgg_view_field([
-	'#type' => 'fieldset',
-	'legend' => elgg_echo('hybridauth:metadata_import_mapping'),
-	'#help' => elgg_echo('hybridauth:metadata_import_mapping:help'),
-	'fields' => $mapping_fields,
+//echo elgg_view_field([
+//	'#type' => 'fieldset',
+//	'legend' => elgg_echo('hybridauth:metadata_import_mapping'),
+//	'#help' => elgg_echo('hybridauth:metadata_import_mapping:help'),
+//	'fields' => $mapping_fields,
+//]);
+//
+//echo elgg_view_field([
+//	'#type' => 'access',
+//	'#label' => elgg_echo('hybridauth:import_mapping_access_id'),
+//	'#help' => elgg_echo('hybridauth:import_mapping_access_id:help'),
+//	'name' => 'import_mapping_access_id',
+//	'value' => isset($entity->import_mapping_access_id) ? $entity->import_mapping_access_id : ACCESS_PRIVATE,
+//]);
+
+echo '<fieldset>';
+echo '<h4>' . elgg_echo('hybridauth:metadata_import_mapping') . '</h4>';
+echo elgg_view('output/longtext', [
+	'value' => elgg_echo('hybridauth:metadata_import_mapping:help'),
+	'class' => 'elgg-subtext'
 ]);
 
-echo elgg_view_field([
-	'#type' => 'access',
-	'#label' => elgg_echo('hybridauth:import_mapping_access_id'),
-	'#help' => elgg_echo('hybridauth:import_mapping_access_id:help'),
-	'name' => 'import_mapping_access_id',
-	'value' => isset($entity->import_mapping_access_id) ? $entity->import_mapping_access_id : ACCESS_PRIVATE,
-]);
-
+foreach ($mapping_fields as $field) {
+	echo '<div style="padding: 5px">';
+	echo '<label>' . $field['#label'] . '</label>';
+	echo elgg_view('input/' . $field['#type'], $field);
+	if ($field['#help']) {
+		echo elgg_view('output/longtext', [
+			'value' => $field['#help'],
+			'class' => 'elgg-subtext'
+		]);
+	}
+	echo '</div>';
+}
+echo '</fieldset>';
