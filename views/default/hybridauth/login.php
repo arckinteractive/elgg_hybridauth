@@ -12,6 +12,7 @@ if (empty($providers)) {
 }
 
 elgg_load_css('hybridauth.css');
+elgg_require_js("hybridauth/login");
 
 echo '<div class="hybridauth-form">';
 echo '<label class="hybridauth-form-label">' . elgg_echo('hybridauth:connect') . '</label>';

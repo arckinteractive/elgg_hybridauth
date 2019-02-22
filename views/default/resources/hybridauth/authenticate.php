@@ -1,4 +1,7 @@
 <?php
+/**
+ * @uses $vars['persistent'] login persistent flag
+ */
 
 if (!elgg_get_plugin_setting('public_auth', 'elgg_hybridauth')) {
 	gatekeeper();
@@ -69,7 +72,7 @@ if ($elgg_forward_url) {
 		$forward_url = "settings/user/{$user->username}?{$query}";
 	} else {
 		$forward_url = "?{$query}"; 
-        }
+	}
 }
 
 if ($session_handle && $session_handle != \Elgg\HybridAuth\Session::DEFAULT_HANDLE) {
@@ -140,33 +143,34 @@ if ($users) {
 	// Profile for this provider exists
 	if (!elgg_is_logged_in()) {
 		$user_to_login->elgg_hybridauth_login = 1;
-                try {
-                        login($user_to_login);
-                } catch(LoginException $e){
-                        register_error($e->getMessage());
-                        forward(REFERER);
-                }
-                             
-                $user = $user_to_login;
-                $forward_source = null;
-                
-                //code extracted from login action:
-                
-                // elgg_echo() caches the language and does not provide a way to change the language.
-                // @todo we need to use the config object to store this so that the current language
-                // can be changed. Refs #4171
-                if ($user->language) {
-                        $message = elgg_echo('hybridauth:login:provider', array($provider->getName()), $user->language);
-                } else {
-                        $message = elgg_echo('hybridauth:login:provider', array($provider->getName()));
-                }
-
-                // clear after login in case login fails
-                if ($session) $session->remove('last_forward_from');
-
-                $params = array('user' => $user, 'source' => $forward_source);
-                $forward_url = elgg_trigger_plugin_hook('login:forward', 'user', $params, $forward_url);
-                
+		$persistent = elgg_extract('persistent', $vars, false);
+		try {
+			login($user_to_login, $persistent);
+		} catch(LoginException $e){
+			register_error($e->getMessage());
+			forward(REFERER);
+		}
+		
+		$user = $user_to_login;
+		$forward_source = null;
+		
+		//code extracted from login action:
+		
+		// elgg_echo() caches the language and does not provide a way to change the language.
+		// @todo we need to use the config object to store this so that the current language
+		// can be changed. Refs #4171
+		if ($user->language) {
+			$message = elgg_echo('hybridauth:login:provider', array($provider->getName()), $user->language);
+		} else {
+			$message = elgg_echo('hybridauth:login:provider', array($provider->getName()));
+		}
+		
+		// clear after login in case login fails
+		if ($session) $session->remove('last_forward_from');
+		
+		$params = array('user' => $user, 'source' => $forward_source);
+		$forward_url = elgg_trigger_plugin_hook('login:forward', 'user', $params, $forward_url);
+		
 		system_message($message);
 		forward($forward_url);
 	}
